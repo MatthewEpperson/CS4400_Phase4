@@ -1,0 +1,12 @@
+{
+  "name": "cs4400_mvp",
+  "version": "1.0.0",
+  "description": "Minimum Viable Product for CS4400 Phase IV",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Joel Jones, Nifemi Bolu, Matt Epperson",
+  "license": "ISC"
+}

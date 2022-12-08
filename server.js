@@ -111,12 +111,28 @@ app.get("/display-pilots-view", function(req, res) {
 })
 
 
+app.get("/display-services-view", function(req, res) {
+    userQuery = "select * from display_service_view"
+    connection.query(userQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(userQuery);
+            res.json({success: true, data: rows})
+        }
+    })
+})
+
 app.get("/main", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "index.html");
 })
 
 app.get("/ingredients_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "ingredients_view.html");
+})
+
+app.get("/services_view", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "services_view.html");
 })
 
 app.get("/owners_view", function(req, res){

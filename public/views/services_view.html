@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<head>
+    <meta charset = "UTF-8">
+    <title>Minimum Viable Product</title>
+    <script src="scripts/services_view.js" defer>
+    </script>
+    <link rel="stylesheet" href="styles/services_view.css">
+</head>
+<body>
+    <div id="container">
+        <h1 id = "title">Services</h1>
+        <label for="serviceID">ID:</label>
+        <input type="text" id="serviceID">
+        <label for="serviceName">&nbsp &nbsp Name:</label>
+        <input type="text" id="serviceName">
+        <label for="serviceManager">&nbsp &nbsp Manager:</label>
+        <input type="text" id="serviceManager">
+        <button type="button" id="clearBtn">Clear</button>
+    </div>
+    <div id="serviceDiv">
+        <table id="serviceTable" class="sortable">
+            <thead>
+                <tr>
+                    <th>Service ID</th>
+                    <th>Name</th>
+                    <th>Home Base</th>
+                    <th>Manager</th>
+                    <th>Revenue</th>
+                    <th>Ingredients Carried</th>
+                    <th>Cost Carried</th>
+                    <th>Weight Carried</th>
+                </tr>
+            </thead>
+            <tbody id="testBody"></tbody>
+        </table>
+    </div>
+    </div>
+</body>

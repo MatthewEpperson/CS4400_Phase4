@@ -222,15 +222,3 @@ app.get("/ingredients_view", function(req, res){
 app.get("/owners_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "owners_view.html");
 })
-
-app.get("/pilots_view", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "pilots_view.html");
-})
-
-app.get("/locations_view", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "locations_view.html");
-})
-
-app.get("/employees_view", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "employees_view.html");
-})

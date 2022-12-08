@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<head>
+    <meta charset = "UTF-8">
+    <title>Minimum Viable Product</title>
+    <script src="scripts/registration.js" defer></script>
+</head>
+<body>
+    <div id="container">
+        <h1 id ="title">Registration</h1>
+    </div>
+
+    <div id="registration_container">
+
+        <form method="POST" id="registration_form">
+            <div>
+                <label id ="type_label">Select type of user</label> 
+                <select id="type_input">
+                    <option></option>
+                    <option value="Employee">Employee</option>
+                    <option value="Owner">Owner</option>
+                </select>
+            </div>
+            
+            <div>
+                <label id="username_label" for="username_input">Username</label>
+                <input type="text" name="username_input" id="username_input">
+            </div>
+            <div>
+                <label id="first_name_label" for="first_name_input">First name</label>
+                <input type="text" name="first_name_input" id="first_name_input">
+            </div>
+            <div>
+                <label id="last_name_label" for="last_name_input">Last name</label>
+                <input type="text" name="last_name_input" id="last_name_input">
+            </div>
+            <div>
+                <label id="address_label" for="address_input">Address</label>
+                <input type="text" name="address_input" id="address_input">
+            </div>
+            <div>
+                <label id="date_label" for="date_input">Birth date</label>
+                <input type="date" name='date_input' id="date_input">
+            </div>
+            <div>
+                <label hidden id="experience_label" for="experience_input">Years of experience</label>
+                <input hidden type="number" name="experience_input" id="experience_input" min="0" max="100">
+            </div>
+            <div>
+                <label hidden id="tax_label" for="tax_input">SSN</label>
+                <input hidden type="password" name="tax_input" id="tax_input" placeholder="123-45-6789">
+            </div>
+            <div>
+                <input type="submit" name="submit_button" id="submit_button" value="Register">
+            </div>
+        </form>
+        <div>
+            <p id="message"></p>
+        </div>
+    </div>
+</body>

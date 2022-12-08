@@ -7,8 +7,11 @@ function displaySelect() {
 }
 function displaySelectHandler() {
     if (this.response.success) {
-        if (this.response.quote) {
-            document.getElementById("select_output").innerHTML = this.response.quote        }
+        if (this.response.data) {
+            for (let i in this.response.data) {
+                document.getElementById("select_output").innerText += JSON.stringify(this.response.data) + '\n'        
+            }
+        }
     } else {
         console.log(this.response.message);
     }

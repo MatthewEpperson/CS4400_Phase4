@@ -124,19 +124,6 @@ app.get("/update-authenticated", function(req, res) {
     res.json({success: true})
 })
 
-app.get("/display-ingredients-view", function(req, res) {
-    userQuery = "select * from display_ingredient_view"
-    connection.query(userQuery, function(err, rows) {
-        if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
-        } else {
-            console.log(userQuery);
-            res.json({success: true, data: rows})
-        }
-    })
-})
-
-
 
 app.get("/display-employee-view", function(req, res) {
     userQuery = "select * from display_employee_view"

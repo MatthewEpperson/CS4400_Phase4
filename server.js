@@ -137,20 +137,6 @@ app.get("/display-employee-view", function(req, res) {
     })
 })
 
-
-app.get("/display-locations-view", function(req, res) {
-    userQuery = "select * from display_location_view"
-    connection.query(userQuery, function(err, rows) {
-        if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
-        } else {
-            console.log(userQuery);
-            res.json({success: true, data: rows})
-        }
-    })
-})
-
-
 app.get("/display-owners-view", function(req, res) {
     userQuery = "select * from display_owner_view"
     connection.query(userQuery, function(err, rows) {

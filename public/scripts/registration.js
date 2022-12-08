@@ -147,7 +147,6 @@ function getQuery() {
     } else {
         result += `&experience=${document.getElementById("experience_input").value}`
         result += `&taxID=${document.getElementById("tax_input").value}`
-        result += `&tax_label=${document.getElementById("tax_input").value}`
         return result
     }
 }

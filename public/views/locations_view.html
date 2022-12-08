@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<head>
+    <meta charset = "UTF-8">
+    <title>Minimum Viable Product</title>
+    <script src="scripts/locations_view.js" defer>
+    </script>
+    <link rel="stylesheet" href="styles/locations_view.css">
+</head>
+<body>
+    <div id="container">
+        <h1 id = "title">Locations</h1>
+        <label for="username">Name:</label>
+        <input type="text" id="name">
+        <label for="taxID">&nbsp &nbsp Number of Drones:</label>
+        <input type="text" id="drones">
+        <button type="button" id="clearBtn">Clear</button>
+    </div>
+    <div id="locationDiv">
+        <table id="locationTable" class="sortable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>X Coord</th>
+                    <th>Y Coord</th>
+                    <th>Num Restaurants</th>
+                    <th>Num Delivery Services</th>
+                    <th>Num Drones</th>
+                </tr>
+            </thead>
+            <tbody id="testBody"></tbody>
+        </table>
+    </div>
+    </div>
+</body>

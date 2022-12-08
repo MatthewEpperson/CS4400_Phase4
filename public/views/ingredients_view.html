@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<head>
+    <meta charset = "UTF-8">
+    <title>Minimum Viable Product</title>
+    <script src="scripts/ingredients_view.js" defer>
+        // window.onload = loadIngredientData;
+    </script>
+    <link rel="stylesheet" href="styles/ingredients_view.css">
+</head>
+<body>
+    <div id="container">
+        <h1 id = "title">Ingredients</h1>
+        <label for="username">Name:</label>
+        <input type="text" id="name">
+        <label for="taxID">&nbsp &nbsp Location:</label>
+        <input type="text" id="location">
+        <button type="button" id="clearBtn">Clear</button>
+    </div>
+    <div id="ingredientDiv">
+        <table id="ingredientTable" class="sortable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Amount Available</th>
+                    <th>Low Price</th>
+                    <th>High Price</th>
+                </tr>
+            </thead>
+            <tbody id="testBody"></tbody>
+        </table>
+    </div>
+    </div>
+</body>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+    <meta charset = "UTF-8">
+    <title>Minimum Viable Product</title>
+    <script src="scripts/pilots_view.js" defer>
+    </script>
+    <link rel="stylesheet" href="styles/pilots_view.css">
+</head>
+<body>
+    <div id="container">
+        <h1 id = "title">Pilots</h1>
+        <label for="username">Username:</label>
+        <input type="text" id="username">
+        <label for="taxID">&nbsp &nbsp License ID:</label>
+        <input type="text" id="licenseID">
+        <button type="button" id="clearBtn">Clear</button>
+    </div>
+    <div id="pilotDiv">
+        <table id="pilotTable" class="sortable">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>License ID</th>
+                    <th>Experience</th>
+                    <th>Num Drones</th>
+                    <th>Num Locations</th>
+                </tr>
+            </thead>
+            <tbody id="testBody"></tbody>
+        </table>
+    </div>
+    </div>
+</body>

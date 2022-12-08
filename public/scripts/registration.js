@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 let currUser;
 let authenticated = false;
 
@@ -51,6 +52,8 @@ function check() {
         document.getElementById("log-out-button").setAttribute("hidden", true)
     }
 }
+=======
+>>>>>>> f16d033 (initial changes for registration)
 let select_input = document.getElementById("type_input")
 select_input.onchange = selectHandler
 let form = document.getElementById("registration_form")
@@ -125,8 +128,13 @@ function responseHandler(){
     message.style.display = "block"
     if (this.response.success){
         message.innerText = this.response.message;
+<<<<<<< HEAD
         authenticated = true;
         check();
+=======
+        // authenticated = true;
+        // check();
+>>>>>>> f16d033 (initial changes for registration)
     } else{
         message.innerText = this.response.message;
         authenticated = false;
@@ -134,18 +142,30 @@ function responseHandler(){
 }
 
 function getQuery() {
+<<<<<<< HEAD
     let result = `type=${selected}&`
     result += `username=${username.value}&`
     result += `fname=${document.getElementById("first_name_input").value}&`
     result += `lname=${document.getElementById("last_name_input").value}&`
     result += `address=${document.getElementById("address_input").value}&`
+=======
+    let result = ``
+    result += `username=${username.value}&`
+    result += `fname=${document.getElementById("first_name_input").value}&`
+    result += `lname=${document.getElementById("last_name_input").value}&`
+    result += `address=${document.getElementById("address_input")}&`
+>>>>>>> f16d033 (initial changes for registration)
     result += `bdate=${document.getElementById("date_input").value}`
 
     if (selected === "Owner") {
         return result
     } else {
         result += `&experience=${document.getElementById("experience_input").value}`
+<<<<<<< HEAD
         result += `&taxID=${document.getElementById("tax_input").value}`
+=======
+        result += `&tax_label=${document.getElementById("tax_input").value}`
+>>>>>>> f16d033 (initial changes for registration)
         return result
     }
 }

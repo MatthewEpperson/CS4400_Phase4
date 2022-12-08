@@ -54,7 +54,6 @@ app.get("/attempt-login", function(req, res) {
     })
 })
 
-
 app.post("/attempt-register", function(req, res){
     query = "select * from users where username = ?"
     connection.query(query, [req.body.username], function(err, rows) {

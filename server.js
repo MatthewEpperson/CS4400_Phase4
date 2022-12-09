@@ -31,8 +31,8 @@ connection.connect(function(err) {
     }
 })
 
-app.listen(3000, function() {
-    console.log("Listening on port 3000")
+app.listen(8080, function() {
+    console.log("Listening on port 8080")
 })
 
 // Database successfully established after this point
@@ -201,6 +201,15 @@ app.get("/", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "index.html")
 })
 
+app.get("/home", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "home.html")
+})
+app.get("/login", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "login.html")
+})
+app.get("/owner", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "owner.html")
+})
 app.get("/ingredients_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "ingredients_view.html");
 })

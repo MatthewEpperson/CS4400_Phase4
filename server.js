@@ -4,6 +4,7 @@ const { json } = require("express/lib/response")
 
 
 const app = express()
+authenticated = false;
 
 app.use(express.urlencoded({
     extended: false
@@ -53,6 +54,7 @@ app.get("/attempt-login", function(req, res) {
     })
 })
 
+
 app.post("/attempt-register", function(req, res){
     query = "select * from users where username = ?"
     connection.query(query, [req.body.username], function(err, rows) {
@@ -66,19 +68,61 @@ app.post("/attempt-register", function(req, res){
 
             } else if (rows.length == 0) {
                 // TODO implement the registration page form
-                insertUser = ""
-                    connection.query(insertUser, [req.body.username], function(err, rows){
-                        if (err){
-                            res.json({success: false, message: "server error, location two"})
-                        }
-                        else{
-                            res.json({success: true, message: "user registered"})
-                        }
-                    })
-                res.json({success: true, message: `successfully created user ${req.body.username}`})
+                if (req.body.type === "Employee") {
+                    insertUser = 'call add_employee(?, ?, ?, ?, ?, ?, null, ?, null);'
+                    connection.query(insertUser, [
+                        req.body.username,
+                        req.body.fname,
+                        req.body.lname,
+                        req.body.address,
+                        req.body.bdate,
+                        req.body.taxID,
+                        req.body.experience
+                        ], function(err, rows) {
+                            if (err) {
+                                console.log(err.message)
+                                res.json({success: false, message: "database insert failed for /attempt_register (employee)"})
+                            } else {
+                                res.json({success: true, message: "successfully added employee"})
+                            }
+                        })
+
+                } else if (req.body.type === 'Owner') {
+                    insertUser = 'call add_owner(?, ?, ?, ?, ?);'
+                    connection.query(insertUser, [
+                        req.body.username,
+                        req.body.fname,
+                        req.body.lname,
+                        req.body.address,
+                        req.body.bdate,
+                        ], function(err, rows) {
+                            if (err) {
+                                console.log(err.message)
+                                res.json({success: false, message: "database insert failed for /attempt_register (owner)"})
+                            } else {
+                                res.json({success: true, message: "successfully added owner"})
+                            }
+                        })
+                } else {
+                    res.json({success: false, message: `Type invalid`})
+                }
             }
         }
     })    
+})
+
+app.get("/checkedLoggedIn", function(req, res) { 
+    // console.log("Server received POST to /checkedLoggedIn...");
+    if (authenticated) {
+        res.json({success: true, message: "User is signed in", user: currUser})
+    } else {
+        res.json({success: false, message: "User not signed in"})
+    }
+})
+
+app.get("/update-authenticated", function(req, res) {
+    authenticated = false;
+    res.json({success: true})
 })
 
 app.get("/display-pilot-vew", function(req, res) {
@@ -99,5 +143,10 @@ app.get("/main", function(req, res){
 app.get("/registration", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "registration.html")
 })
+
+app.get("/", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "index.html")
+})
+
 
 

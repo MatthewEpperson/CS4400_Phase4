@@ -1,3 +1,56 @@
+let currUser;
+let authenticated = false;
+
+
+document.addEventListener("DOMContentLoaded", (event) => {
+    let xhr = new XMLHttpRequest
+    xhr.addEventListener("load", authenticator)
+    url = `/checkedLoggedIn`
+    xhr.responseType = "json";   
+    xhr.open("GET", url)
+    console.log("GET /checkedLoggedIn request to server....");
+    xhr.send();
+});
+document.getElementById("log-out-button").addEventListener("click", function(event) {
+    authenticated = false;
+    let xhr = new XMLHttpRequest
+    xhr.addEventListener("load", serverCheck)
+    url = `/update-authenticated`
+    xhr.responseType = "json";   
+    xhr.open("GET", url)
+    xhr.send();
+    currUser = "Should not see";
+    check();
+})
+
+
+
+function serverCheck() {
+    if (this.response.success) {
+        console.log("good response from update-authenticated");
+    } else {
+        console.log("bad response from update-authenticated");
+    }
+}
+
+function authenticator() {
+    if (this.response.success) {
+        authenticated = true;
+        currUser = this.response.user;
+    } else {
+        authenticated = false;    }
+    check();
+}
+
+function check() {
+    if (authenticated) {
+        document.getElementById("registration_form").setAttribute("hidden", true);
+        document.getElementById("log-out-button").removeAttribute("hidden");
+    } else {
+        document.getElementById("registration_form").removeAttribute("hidden");
+        document.getElementById("log-out-button").setAttribute("hidden", true)
+    }
+}
 let select_input = document.getElementById("type_input")
 select_input.onchange = selectHandler
 let form = document.getElementById("registration_form")
@@ -72,8 +125,8 @@ function responseHandler(){
     message.style.display = "block"
     if (this.response.success){
         message.innerText = this.response.message;
-        // authenticated = true;
-        // check();
+        authenticated = true;
+        check();
     } else{
         message.innerText = this.response.message;
         authenticated = false;
@@ -81,18 +134,18 @@ function responseHandler(){
 }
 
 function getQuery() {
-    let result = ``
+    let result = `type=${selected}&`
     result += `username=${username.value}&`
     result += `fname=${document.getElementById("first_name_input").value}&`
     result += `lname=${document.getElementById("last_name_input").value}&`
-    result += `address=${document.getElementById("address_input")}&`
+    result += `address=${document.getElementById("address_input").value}&`
     result += `bdate=${document.getElementById("date_input").value}`
 
     if (selected === "Owner") {
         return result
     } else {
         result += `&experience=${document.getElementById("experience_input").value}`
-        result += `&tax_label=${document.getElementById("tax_input").value}`
+        result += `&taxID=${document.getElementById("tax_input").value}`
         return result
     }
 }

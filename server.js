@@ -165,21 +165,6 @@ app.get("/display-owners-view", function(req, res) {
 })
 
 
-
-
-
-app.get("/display-pilot-view", function(req, res) {
-    userQuery = "select * from display_pilot_view"
-    connection.query(userQuery, req,function(err, rows) {
-        if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
-        } else {
-            res.json({success: true, message: "database query successful for /display-select"})
-        }
-    })
-})
-
-
 app.get("/display-drones", function(req, res) {
     userQuery = "select * from drones"
     ingredientsQuery = "select * from ingredients"

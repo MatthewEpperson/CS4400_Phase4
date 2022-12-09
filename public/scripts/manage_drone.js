@@ -63,6 +63,10 @@ function populateTable(items, tableName) {
             j++;
         }
     }
+
+    let colName = row.insertCell(itemKeys.length);
+    let btn = document.createElement("button");
+    colName.appendChild(btn);
 }
 
 

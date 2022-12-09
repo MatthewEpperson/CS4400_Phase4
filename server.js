@@ -137,7 +137,6 @@ app.get("/display-ingredients-view", function(req, res) {
 })
 
 
-<<<<<<< HEAD
 
 app.get("/display-employee-view", function(req, res) {
     userQuery = "select * from display_employee_view"
@@ -190,8 +189,6 @@ app.get("/display-pilots-view", function(req, res) {
 })
 
 
-=======
->>>>>>> 9660522 (fixed merge)
 app.get("/main", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "index.html");
 })
@@ -215,6 +212,10 @@ app.get("/owner", function(req, res){
 })
 
 
+app.get("/services_view", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "services_view.html");
+})
+
 app.get("/owners_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "owners_view.html");
 })
@@ -222,16 +223,6 @@ app.get("/ingredients_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "ingredients_view.html");
 })
 
-<<<<<<< HEAD
 app.get("/owners_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "owners_view.html");
 })
-=======
-app.get("/ingredients_view", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "ingredients_view.html");
-})
-
-app.get("/owners_view", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "owners_view.html");
-})
->>>>>>> 9660522 (fixed merge)

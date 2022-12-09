@@ -14,7 +14,7 @@ const connection = mysql.createConnection({
 
     host: "localhost",
     user: "root",
-    password: "password",
+    password: "asdqwe123",
     database: "restaurant_supply_express"
 
 })
@@ -53,6 +53,29 @@ app.get("/attempt-login", function(req, res) {
         }
     })
 })
+
+
+app.post("/attempt-refuel", function(req, res) {
+    let refuelDrone = 'call refuel_drone(?, ?, ?);'
+    console.log(JSON.stringify(req.body))
+    console.log(req.body.droneid)
+    console.log(req.body.dronetag)
+    console.log(req.body.fuel_amount)
+    connection.query(refuelDrone, [
+        req.body.droneid,
+        req.body.dronetag,
+        req.body.fuel_amount
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt_refuel"})
+            console.log(`database error for ${req.body.droneid} ${req.body.dronetag}`)
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully refueled drone"})
+        }
+    })
+})
+
 
 app.post("/attempt-register", function(req, res){
     query = "select * from users where username = ?"
@@ -168,6 +191,7 @@ app.get("/display-owners-view", function(req, res) {
 app.get("/display-drones", function(req, res) {
     userQuery = "select * from drones"
     ingredientsQuery = "select * from ingredients"
+    deliverServiceQuery = "select * from delivery_services"
     let drones;
     connection.query(userQuery, function(err, rows) {
         if (err) {
@@ -186,7 +210,16 @@ app.get("/display-drones", function(req, res) {
             console.log(userQuery);
             // res.json({success: true, ingredients: rows})
             ingredients = rows
-            res.json({success: true, ingredients: ingredients, drones: drones})
+        }
+    })
+    let deliveryServices;
+    connection.query(deliverServiceQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            // console.log(userQuery);
+            deliveryServices = rows
+            res.json({success: true, ingredients: ingredients, drones: drones, deliveryServices: deliveryServices})
         }
     })
 })

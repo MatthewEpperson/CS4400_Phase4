@@ -211,6 +211,7 @@ app.get("/owner", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "owner.html")
 })
 
+<<<<<<< HEAD
 
 app.get("/services_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "services_view.html");
@@ -223,6 +224,8 @@ app.get("/ingredients_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "ingredients_view.html");
 })
 
+=======
+>>>>>>> fd1ae24 (fixed merge rebase main)
 app.get("/owners_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "owners_view.html");
 })

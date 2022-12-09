@@ -51,15 +51,6 @@ function check() {
         document.getElementById("log-out-button").setAttribute("hidden", true)
     }
 }
-<<<<<<< HEAD
-=======
-=======
-<<<<<<< HEAD
->>>>>>> f16d033 (initial changes for registration)
-=======
->>>>>>> 0d9569c (initial changes for registration)
->>>>>>> 937093e (fixed rebase conflicts)
->>>>>>> 9660522 (fixed merge)
 let select_input = document.getElementById("type_input")
 select_input.onchange = selectHandler
 let form = document.getElementById("registration_form")
@@ -137,15 +128,6 @@ function responseHandler(){
         authenticated = true;
         check();
         // authenticated = true;
-        // check();
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> f16d033 (initial changes for registration)
-=======
->>>>>>> 0d9569c (initial changes for registration)
->>>>>>> 937093e (fixed rebase conflicts)
->>>>>>> 9660522 (fixed merge)
     } else{
         message.innerText = this.response.message;
         authenticated = false;

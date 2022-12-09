@@ -139,14 +139,6 @@ function getQuery() {
     result += `fname=${document.getElementById("first_name_input").value}&`
     result += `lname=${document.getElementById("last_name_input").value}&`
     result += `address=${document.getElementById("address_input").value}&`
-<<<<<<< HEAD
-=======
-=======
-    let result = ``
-    result += `username=${username.value}&`
-    result += `fname=${document.getElementById("first_name_input").value}&`
-    result += `lname=${document.getElementById("last_name_input").value}&`
-    result += `address=${document.getElementById("address_input")}&`
     result += `bdate=${document.getElementById("date_input").value}`
 
     if (selected === "Owner") {

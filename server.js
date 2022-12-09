@@ -164,8 +164,59 @@ app.get("/display-owners-view", function(req, res) {
     })
 })
 
+
+
+app.get("/display-pilot-view", function(req, res) {
+    userQuery = "select * from?"
+    connection.query(userQuery, req,function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            res.json({success: true, message: "database query successful for /display-select"})
+        }
+    })
+})
+
+app.get("/display-drones", function(req, res) {
+    userQuery = "select * from drones"
+    ingredientsQuery = "select * from ingredients"
+    let drones;
+    connection.query(userQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(userQuery);
+            drones = rows
+            // res.json({success: true, data: rows})
+        }
+    })
+    let ingredients;
+    connection.query(ingredientsQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(userQuery);
+            // res.json({success: true, ingredients: rows})
+            ingredients = rows
+            res.json({success: true, ingredients: ingredients, drones: drones})
+        }
+    })
+})
+
 app.get("/display-pilots-view", function(req, res) {
     userQuery = "select * from display_pilot_view"
+    connection.query(userQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(userQuery);
+            res.json({success: true, data: rows})
+        }
+    })
+})
+
+app.get("/display-services-view", function(req, res) {
+    userQuery = "select * from display_service_view"
     connection.query(userQuery, function(err, rows) {
         if (err) {
             res.json({success: false, message:"database query failed for /display-select"})
@@ -211,4 +262,20 @@ app.get("/ingredients_view", function(req, res){
 
 app.get("/owners_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "owners_view.html");
+})
+
+app.get("/manage_drone", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "manage_drone.html");
+})
+
+app.get("/pilots_view", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "pilots_view.html");
+})
+
+app.get("/locations_view", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "locations_view.html");
+})
+
+app.get("/employees_view", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "employees_view.html");
 })

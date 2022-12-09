@@ -1,0 +1,32 @@
+table {
+    overflow-y:scroll;
+   height:250px;
+   display: inline-block;
+}
+
+#ingredientDiv, #droneDiv {
+    display: inline-block;
+    text-align: center;
+    padding-left: 50px;
+}
+
+
+#container{
+    text-align: center;
+    padding-bottom: 5px;
+}
+
+table, tr, th{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+td {
+    padding-left: 15px;
+    padding-right: 15px;
+    text-align: center;
+}
+
+th{
+    padding: 8px;
+}

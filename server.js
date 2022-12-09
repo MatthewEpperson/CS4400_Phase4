@@ -31,8 +31,8 @@ connection.connect(function(err) {
     }
 })
 
-app.listen(8080, function() {
-    console.log("Listening on port 8080")
+app.listen(3000, function() {
+    console.log("Listening on port 3000")
 })
 
 // Database successfully established after this point
@@ -160,21 +160,6 @@ app.get("/display-owners-view", function(req, res) {
         } else {
             console.log(userQuery);
             res.json({success: true, data: rows})
-        }
-    })
-})
-
-
-
-
-
-app.get("/display-pilot-view", function(req, res) {
-    userQuery = "select * from display_pilot_view"
-    connection.query(userQuery, req,function(err, rows) {
-        if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
-        } else {
-            res.json({success: true, message: "database query successful for /display-select"})
         }
     })
 })

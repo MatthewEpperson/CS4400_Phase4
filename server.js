@@ -14,7 +14,7 @@ const connection = mysql.createConnection({
 
     host: "localhost",
     user: "root",
-    password: "asdqwe123",
+    password: "Olaolu5796",
     database: "restaurant_supply_express"
 
 })
@@ -299,4 +299,34 @@ app.get("/locations_view", function(req, res){
 
 app.get("/employees_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "employees_view.html");
+})
+app.get("/adminPage", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "adminPage.html");
+})
+app.get("/adminAccess", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "adminAccess.html");
+})
+app.get("/loginWorker", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "loginWorker.html");
+})
+app.get("/loginPilot", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "loginPilot.html");
+})
+app.get("/loginManager", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "loginManager.html");
+})
+app.get("/loginOwner", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "loginOwner.html");
+})
+app.get("/workerPage", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "workerPage.html");
+})
+app.get("/pilotPage", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "pilotPage.html");
+})
+app.get("/managerPage", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "managerPage.html");
+})
+app.get("/ownerPage", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "ownerPage.html");
 })

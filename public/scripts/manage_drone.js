@@ -66,6 +66,7 @@ function populateTable(items, tableName) {
         }
     }
 
+
     if (tableName == "droneTable") {
         let colName = row.insertCell(itemKeys.length);
         let btn = document.createElement("button");

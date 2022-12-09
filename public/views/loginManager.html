@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<head>
+    <meta charset = "UTF-8">
+    <title>Minimum Viable Product</title>
+    <script src="scripts/loginManager.js" defer></script>
+</head>
+<body>
+    <div id="container">
+        <h1 id = "title">Manager Login Page</h1>
+    </div>
+
+    <div id="loginText">
+        <label for="Name">Username:</label>
+        <input type="text" id="Name" name="Name" placeholder="Enter Username">
+    </div>
+    <div id="first_query">
+        <label id="query_label" for="query_input">
+            
+        </label>
+        <!-- this button should take string value in text box and check with database if it is in the valid employee subclass  -->
+        <input type="button" id="query_input" name="query_input" value="Login" onclick="location.href='managerPage';">
+        <p id="select_output"></p>
+</div>
+</body>

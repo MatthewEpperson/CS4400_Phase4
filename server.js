@@ -135,6 +135,87 @@ app.get("/display-pilot-vew", function(req, res) {
     })
 })
 
+
+app.get("/display-employee-view", function(req, res) {
+    userQuery = "select * from display_employee_view"
+    connection.query(userQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(userQuery);
+            res.json({success: true, data: rows})
+        }
+    })
+})
+
+app.get("/display-ingredients-view", function(req, res) {
+    userQuery = "select * from display_ingredient_view"
+    connection.query(userQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(userQuery);
+            res.json({success: true, data: rows})
+        }
+    })
+})
+
+app.get("/display-locations-view", function(req, res) {
+    userQuery = "select * from display_location_view"
+    connection.query(userQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            if (rows.length == 0) {
+                res.json({sucess: false, message: "user not found in database"})
+            } else if (rows.length == 1) {
+                res.json({success: true, message: "database query successful for /attempt-login"})
+            } else {
+                res.json({success: false, message: "too many users with that username found"})
+            }
+        }
+    })
+})
+
+app.post("/attempt-register", function(req, res){
+    query = "select * from users where username = ?"
+    connection.query(query, [req.body.username], function(err, rows) {
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt_register"})
+            console.log(`database error for ${req.body.username}`)
+        } else {
+            if (rows.length == 1) {
+                res.json({success: false, message: "username already taken"})
+                console.log(`username already taken error for ${req.body.username}`)
+
+            } else if (rows.length == 0) {
+                // TODO implement the registration page form
+                insertUser = ""
+                    connection.query(insertUser, [req.body.username], function(err, rows){
+                        if (err){
+                            res.json({success: false, message: "server error, location two"})
+                        }
+                        else{
+                            res.json({success: true, message: "user registered"})
+                        }
+                    })
+                res.json({success: true, message: `successfully created user ${req.body.username}`})
+            }
+        }
+    })    
+})
+
+app.get("/display-pilot-vew", function(req, res) {
+    userQuery = "select * from?"
+    connection.query(userQuery, req,function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            res.json({success: true, message: "database query successful for /display-select"})
+        }
+    })
+})
+
 app.get("/main", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "index.html");
 })
@@ -149,3 +230,10 @@ app.get("/", function(req, res){
 
 
 
+app.get("/ingredients_view", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "ingredients_view.html");
+})
+
+app.get("/owners_view", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "owners_view.html");
+})

@@ -53,7 +53,11 @@ function check() {
     }
 }
 =======
+<<<<<<< HEAD
 >>>>>>> f16d033 (initial changes for registration)
+=======
+>>>>>>> 0d9569c (initial changes for registration)
+>>>>>>> 937093e (fixed rebase conflicts)
 let select_input = document.getElementById("type_input")
 select_input.onchange = selectHandler
 let form = document.getElementById("registration_form")
@@ -134,7 +138,11 @@ function responseHandler(){
 =======
         // authenticated = true;
         // check();
+<<<<<<< HEAD
 >>>>>>> f16d033 (initial changes for registration)
+=======
+>>>>>>> 0d9569c (initial changes for registration)
+>>>>>>> 937093e (fixed rebase conflicts)
     } else{
         message.innerText = this.response.message;
         authenticated = false;
@@ -154,7 +162,11 @@ function getQuery() {
     result += `fname=${document.getElementById("first_name_input").value}&`
     result += `lname=${document.getElementById("last_name_input").value}&`
     result += `address=${document.getElementById("address_input")}&`
+<<<<<<< HEAD
 >>>>>>> f16d033 (initial changes for registration)
+=======
+>>>>>>> 0d9569c (initial changes for registration)
+>>>>>>> 937093e (fixed rebase conflicts)
     result += `bdate=${document.getElementById("date_input").value}`
 
     if (selected === "Owner") {
@@ -165,7 +177,11 @@ function getQuery() {
         result += `&taxID=${document.getElementById("tax_input").value}`
 =======
         result += `&tax_label=${document.getElementById("tax_input").value}`
+<<<<<<< HEAD
 >>>>>>> f16d033 (initial changes for registration)
+=======
+>>>>>>> 0d9569c (initial changes for registration)
+>>>>>>> 937093e (fixed rebase conflicts)
         return result
     }
 }

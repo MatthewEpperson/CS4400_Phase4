@@ -228,12 +228,18 @@ app.get("/", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "index.html")
 })
 
+app.get("/ingredients_view", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "ingredients_view.html");
+})
 
+<<<<<<< HEAD
 
 app.get("/ingredients_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "ingredients_view.html");
 })
 
+=======
+>>>>>>> 0aff64f (fixed merge)
 app.get("/owners_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "owners_view.html");
 })

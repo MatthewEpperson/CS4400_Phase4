@@ -9,6 +9,7 @@ function displaySelect() {
 let droneData = null;
 let ingredientData = null;
 let deliveryServiceData = null;
+let payload = null;
 
 function displaySelectHandler() {
     if (this.response.success) {
@@ -19,11 +20,15 @@ function displaySelectHandler() {
             let ingredientData = this.response.ingredients;
             deliveryServiceData = this.response.deliveryServices;
             droneData = data;
+            payload = this.response.payload
             for (let i = 0; i < data.length; i++) {
                 populateTable(data[i], "droneTable");
             }
             for (let i = 0; i < ingredientData.length; i++) {
                 populateTable(ingredientData[i], "ingredientTable");
+            }
+            for (let i = 0; i < payload.length; i++) {
+                populateTable(payload[i], "payloadTable")
             }
         }
     } else {
@@ -34,8 +39,8 @@ function displaySelectHandler() {
 
 
 
-function clearTable() {
-    const table = document.getElementById("droneTable");
+function clearTable(tableName) {
+    const table = document.getElementById(tableName);
 
     for (let i = table.rows.length - 1; i > 0; i--) {
         table.deleteRow(i);
@@ -69,24 +74,74 @@ function populateTable(items, tableName) {
 
     if (tableName == "droneTable") {
         let colName = row.insertCell(itemKeys.length);
-        let btn = document.createElement("button");
+        let colName2 = row.insertCell(itemKeys.length + 1);
+        let loadBtn = document.createElement("button");
+        let packagePriceInput = document.createElement("input")
+        let barcodeInput = document.createElement("input")
+        let packageAmtInput = document.createElement("input");
+        let refuelBtn = document.createElement("button");
         let fuelInput = document.createElement("input");
+
+        packagePriceInput.type = "text"
+        barcodeInput.type = "text"
+        packageAmtInput.type = "text"
+        loadBtn.innerText = "Load Drone"
         fuelInput.type = "text";
-        fuelInput.id = `${items['id']} ${items['tag']}`;
-        btn.innerText = "Refuel Drone";
-        btn.onclick = function() {
+        fuelInput.placeholder = "Fuel Amount";
+        fuelInput.id = `Fuel ${items['id']} ${items['tag']}`;
+
+        packagePriceInput.placeholder = "Price"
+        barcodeInput.placeholder = "Barcode"
+        packageAmtInput.placeholder = "Amount"
+        refuelBtn.innerText = "Refuel Drone";
+        packagePriceInput.id = `price ${items['id']} ${items['tag']}`;
+        barcodeInput.id = `barcode ${items['id']} ${items['tag']}`;
+        packageAmtInput.id = `amount ${items['id']} ${items['tag']}`;
+
+        refuelBtn.onclick = function() {
             refuelDrone(fuelInput.id, items['fuel'], items['hover']);
         };
+
+        loadBtn.onclick = function() {
+            loadDrone(fuelInput.id)
+        }
+
         colName.appendChild(fuelInput);
-        colName.appendChild(btn);
+        colName.appendChild(refuelBtn);
+        colName2.appendChild(barcodeInput)
+        colName2.appendChild(packageAmtInput)
+        colName2.appendChild(packagePriceInput)
+        colName2.appendChild(loadBtn)
     }
 }
+
+function loadDrone(drone) {
+    let droneSplit = drone.split(" ");
+    // console.log(droneSplit)
+    let droneID = droneSplit[1]
+    let droneTag = droneSplit[2]
+    let barcode = document.getElementById(`barcode ${droneID} ${droneTag}`)
+    let price = document.getElementById(`price ${droneID} ${droneTag}`)
+    let amount = document.getElementById(`amount ${droneID} ${droneTag}`)
+
+    // console.log(`${barcode.value} ${price.value} ${amount.value} ${droneID} ${droneTag}`)
+
+    let information = `droneID=${droneID}&droneTag=${droneTag}&barcode=${barcode.value}` +
+                    `&amount=${parseInt(amount.value)}&price=${parseInt(price.value)}`
+
+              
+    loadDroneRequest(information)
+    clearTable("payloadTable")
+    displaySelect()
+    
+}
+
 
 function refuelDrone(drone, currAmt, hover) {
     let fuelAmt = document.getElementById(drone);
     let droneSplit = drone.split(" ");
-    let droneID = droneSplit[0];
-    let droneTag = droneSplit[1];
+    let droneID = droneSplit[1];
+    let droneTag = droneSplit[2];
     console.log(droneID)
 
     console.log(currAmt);
@@ -101,7 +156,7 @@ function refuelDrone(drone, currAmt, hover) {
                     && deliveryServiceData[i]['home_base'] == hover) {
                         console.log(`${fuelAmt.value} ${droneID} ${droneTag}`);
                         refuelRequest(information)
-                        clearTable()
+                        clearTable("droneTable")
                         displaySelect();
                         refuelSuccess = true
                     }
@@ -133,6 +188,21 @@ function refuelRequest(information) {
     xml.open("POST", url)
     xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
     xml.send(information)
+}
+
+function loadDroneRequest(information) {
+    let xml = new XMLHttpRequest
+    xml.responseType = "json"
+    xml.addEventListener("load", loadDroneResponse)
+    url = "/attempt-load-drone"
+    
+    xml.open("POST", url)
+    xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xml.send(information)
+}
+
+function loadDroneResponse() {
+
 }
 
 function refuelResponse() {

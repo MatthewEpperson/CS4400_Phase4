@@ -77,6 +77,28 @@ app.post("/attempt-refuel", function(req, res) {
 })
 
 
+app.post("/attempt-load-drone", function(req, res) {
+    let loadDrone = 'call load_drone(?, ?, ?, ?, ?);'
+    console.log(JSON.stringify(req.body))
+    connection.query(loadDrone, [
+        req.body.droneID,
+        req.body.droneTag,
+        req.body.barcode,
+        req.body.amount,
+        req.body.price
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt_load-drone"})
+            console.log(`database error for ${req.body.droneid} ${req.body.dronetag}`)
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully loaded drone"})
+            console.log("Drone got loaded!")
+        }
+    })
+})
+
+
 app.post("/attempt-register", function(req, res){
     query = "select * from users where username = ?"
     connection.query(query, [req.body.username], function(err, rows) {
@@ -192,6 +214,7 @@ app.get("/display-drones", function(req, res) {
     userQuery = "select * from drones"
     ingredientsQuery = "select * from ingredients"
     deliverServiceQuery = "select * from delivery_services"
+    payloadQuery = "select * from payload"
     let drones;
     connection.query(userQuery, function(err, rows) {
         if (err) {
@@ -219,9 +242,20 @@ app.get("/display-drones", function(req, res) {
         } else {
             // console.log(userQuery);
             deliveryServices = rows
-            res.json({success: true, ingredients: ingredients, drones: drones, deliveryServices: deliveryServices})
         }
     })
+    let payloads;
+    connection.query(payloadQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            // console.log(userQuery);
+            payloads = rows
+            res.json({success: true, ingredients: ingredients, drones: drones, deliveryServices: deliveryServices,
+                payload: payloads})
+        }
+    })
+
 })
 
 app.get("/display-pilots-view", function(req, res) {

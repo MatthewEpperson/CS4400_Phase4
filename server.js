@@ -5,6 +5,7 @@ const { json } = require("express/lib/response")
 
 const app = express()
 authenticated = false;
+user = {}
 
 app.use(express.urlencoded({
     extended: false
@@ -99,7 +100,9 @@ app.post("/attempt-register", function(req, res){
                                 console.log(err.message)
                                 res.json({success: false, message: "database insert failed for /attempt_register (owner)"})
                             } else {
-                                res.json({success: true, message: "successfully added owner"})
+                                authenticated = true;
+                                user.username = req.body.username
+                                res.json({success: true, message: "successfully added owner", user: user})
                             }
                         })
                 } else {
@@ -111,9 +114,8 @@ app.post("/attempt-register", function(req, res){
 })
 
 app.get("/checkedLoggedIn", function(req, res) { 
-    // console.log("Server received POST to /checkedLoggedIn...");
     if (authenticated) {
-        res.json({success: true, message: "User is signed in", user: currUser})
+        res.json({success: true, message: "User is signed in", user: user})
     } else {
         res.json({success: false, message: "User not signed in"})
     }
@@ -140,9 +142,10 @@ app.get("/display-ingredients-view", function(req, res) {
 
 
 app.get("/display-employee-view", function(req, res) {
-    userQuery = "select * from display_employee_view"
-    connection.query(userQuery, function(err, rows) {
+    userQuery = "select * from display_employee_view where username in (select username from work_for where id = ?) and manager_status = 'NO'"
+    connection.query(userQuery, ["rr"], function(err, rows) {
         if (err) {
+            console.log(err.message)
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
             console.log(userQuery);
@@ -178,6 +181,7 @@ app.get("/display-drones", function(req, res) {
             // res.json({success: true, data: rows})
         }
     })
+
     let ingredients;
     connection.query(ingredientsQuery, function(err, rows) {
         if (err) {

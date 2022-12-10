@@ -85,6 +85,11 @@ function populateTable(items) {
         }
         colName.innerHTML = items[attribute];
     }
+    let colName = row.insertCell(itemKeys.length)
+    let btn = document.createElement("button")
+    btn.innerText = "Delete Employee"
+
+    colName.appendChild(btn)
 }
 
 

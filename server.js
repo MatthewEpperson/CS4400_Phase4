@@ -174,6 +174,41 @@ app.post("/attempt-takeover-drone", function(req, res) {
 })
 
 
+app.post("/attempt-add-ingredient", function(req, res) {
+    let addIngredient = 'call add_ingredient(?, ?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(addIngredient, [
+        req.body.barcode,
+        req.body.name,
+        req.body.weight
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-add-ingredient"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully added ingredient"})
+            console.log("ingredient was added")
+        }
+    })
+})
+
+
+app.post("/attempt-remove-ingredient", function(req, res) {
+    let removeIngredient = 'call remove_ingredient(?)'
+    connection.query(removeIngredient, [
+        req.body.barcode
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-remove-ingredient"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully removed ingredient"})
+            console.log("ingredient was removed")
+        }
+    })
+})
+
+
 app.post("/attempt-register", function(req, res){
     query = "select * from users where username = ?"
     connection.query(query, [req.body.username], function(err, rows) {
@@ -248,12 +283,26 @@ app.get("/update-authenticated", function(req, res) {
 
 app.get("/display-ingredients-view", function(req, res) {
     userQuery = "select * from display_ingredient_view"
+    ingredientQuery = "select * from ingredients"
+
+    let ingredientView;
     connection.query(userQuery, function(err, rows) {
         if (err) {
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
+            ingredientView = rows
             console.log(userQuery);
-            res.json({success: true, data: rows})
+        }
+    })
+
+    let ingredients;
+    connection.query(ingredientQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            ingredients = rows
+            console.log(ingredientQuery);
+            res.json({success: true, ingredientView: ingredientView, ingredients: ingredients})
         }
     })
 })

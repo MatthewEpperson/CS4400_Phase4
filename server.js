@@ -281,6 +281,26 @@ app.post("/attempt-remove-ingredient", function(req, res) {
 })
 
 
+app.post("/attempt-purchase-ingredient", function(req, res) {
+    let purchaseIngredient = 'call purchase_ingredient(?, ?, ?, ?, ?)'
+    connection.query(purchaseIngredient, [
+        req.body.restaurant,
+        req.body.droneID,
+        req.body.droneTag,
+        req.body.barcode,
+        req.body.quantity
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-purchase-ingredient"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully purchased ingredient"})
+            console.log("ingredient was purchased")
+        }
+    })
+})
+
+
 app.post("/attempt-register", function(req, res){
     query = "select * from users where username = ?"
     connection.query(query, [req.body.username], function(err, rows) {
@@ -419,6 +439,42 @@ app.get("/display-employee-view", function(req, res) {
 })
 
 
+app.get("/display-restaurants", function(req, res) {
+    restaurantQuery = "select * from restaurants"
+    droneQuery = "select * from drones"
+    payloadQuery = "select * from payload"
+
+    let restaurants;
+    connection.query(restaurantQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            restaurants = rows
+        }
+    })
+
+    let drones;
+    connection.query(droneQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            drones = rows
+        }
+    })
+
+    let payloads;
+    connection.query(payloadQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            payloads = rows
+            res.json({success: true, restaurants: restaurants, drones: drones, payloads: payloads})
+        }
+    })
+
+})
+
+
 app.get("/display-owners-view", function(req, res) {
     userQuery = "select * from display_owner_view"
     connection.query(userQuery, function(err, rows) {
@@ -540,6 +596,9 @@ app.get("/owner", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "owner.html")
 })
 
+app.get("/restaurants", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "restaurants.html")
+})
 
 app.get("/services_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "services_view.html");

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<head>
+    <meta charset = "UTF-8">
+    <title>Minimum Viable Product</title>
+    <script src="scripts/restaurants.js" defer>
+    </script>
+    <link rel="stylesheet" href="styles/restaurants.css">
+</head>
+<body>
+    <div id="container">
+        <h1 id = "title">Restaurants Dashboard</h1>
+        <div id="restaurantDiv">
+            <table id="restaurantTable" class="sortable">
+                <thead>
+                    <tr>
+                        <th>Long Name</th>
+                        <th>Rating</th>
+                        <th>Spent</th>
+                        <th>Location</th>
+                        <th>Funded By</th>
+                    </tr>
+                </thead>
+                <tbody id="testBody"></tbody>
+            </table>
+        </div>
+        <div id="droneDiv">
+            <table id="droneTable" class="sortable">
+                <thead>
+                    <h1> Drones </h1>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tag</th>
+                        <th>Fuel</th>
+                        <th>Capacity</th>
+                        <th>Sales</th>
+                        <th>Flown By</th>
+                        <th>Swarm ID</th>
+                        <th>Swarm Tag</th>
+                        <th>Hover</th>
+                    </tr>
+                </thead>
+                <tbody id="testBody"></tbody>
+            </table>
+            <table id="payloadTable" class="sortable">
+                <thead>
+                    <h1> Payload </h1>
+                    <input id="inputRestaurant" placeholder="Enter Restaurant Name">
+                    <input id="inputQuantity" placeholder="Enter Quantity">
+                    <br><br>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tag</th>
+                        <th>Barcode</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th> Purchase Ingredient </th>
+                    </tr>
+                </thead>
+                <tbody id="testBody"></tbody>
+            </table>
+        </div>
+    </div>
+</body>

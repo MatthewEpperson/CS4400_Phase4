@@ -355,6 +355,24 @@ app.post("/attempt-add-ingredient", function(req, res) {
 })
 
 
+app.post("/attempt-fund-restaurant", function(req, res) {
+    let fundRestaurant = 'call start_funding(?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(fundRestaurant, [
+        req.body.owner,
+        req.body.longName,
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-fund-restaurant"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully funded ingredient"})
+            console.log("restaurant was funded")
+        }
+    })
+})
+
+
 app.post("/attempt-remove-ingredient", function(req, res) {
     let removeIngredient = 'call remove_ingredient(?)'
     connection.query(removeIngredient, [
@@ -366,6 +384,26 @@ app.post("/attempt-remove-ingredient", function(req, res) {
         } else {
             res.json({success: true, message: "successfully removed ingredient"})
             console.log("ingredient was removed")
+        }
+    })
+})
+
+
+app.post("/attempt-purchase-ingredient", function(req, res) {
+    let purchaseIngredient = 'call purchase_ingredient(?, ?, ?, ?, ?)'
+    connection.query(purchaseIngredient, [
+        req.body.restaurant,
+        req.body.droneID,
+        req.body.droneTag,
+        req.body.barcode,
+        req.body.quantity
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-purchase-ingredient"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully purchased ingredient"})
+            console.log("ingredient was purchased")
         }
     })
 })
@@ -472,6 +510,19 @@ app.get("/display-ingredients-view", function(req, res) {
 })
 
 
+app.get("/display-owner", function(req, res) {
+    userQuery = "select * from restaurants"
+    connection.query(userQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(userQuery);
+            res.json({success: true, restaurants: rows})
+        }
+    })
+})
+
+
 app.get("/display-locations-view", function(req, res) {
     userQuery = "select * from display_location_view"
     connection.query(userQuery, function(err, rows) {
@@ -544,6 +595,42 @@ app.post("/hire-employee", function(req, res) {
         }
     })
 })
+
+app.get("/display-restaurants", function(req, res) {
+    restaurantQuery = "select * from restaurants"
+    droneQuery = "select * from drones"
+    payloadQuery = "select * from payload"
+
+    let restaurants;
+    connection.query(restaurantQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            restaurants = rows
+        }
+    })
+
+    let drones;
+    connection.query(droneQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            drones = rows
+        }
+    })
+
+    let payloads;
+    connection.query(payloadQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            payloads = rows
+            res.json({success: true, restaurants: restaurants, drones: drones, payloads: payloads})
+        }
+    })
+
+})
+
 
 app.get("/display-owners-view", function(req, res) {
     userQuery = "select * from display_owner_view"
@@ -645,6 +732,7 @@ app.get("/display-services-view", function(req, res) {
     })
 })
 
+
 app.get("/main", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "index.html");
 })
@@ -666,6 +754,9 @@ app.get("/owner", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "owner.html")
 })
 
+app.get("/restaurants", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "restaurants.html")
+})
 
 app.get("/services_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "services_view.html");

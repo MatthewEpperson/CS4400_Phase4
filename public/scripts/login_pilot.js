@@ -24,10 +24,13 @@ function attemptLoginHandler() {
     if (this.response.success) {
         document.getElementById("loginText").setAttribute("hidden", true)
         document.getElementById("login_message").innerText = `Successfully signed in`
+        goNext()
 
     } else {
-        document.getElementById("login_message").innerText = "Wrong username or invalid pilot username"
+        document.getElementById("login_message").innerText = "Wrong username or invalid worker username"
     }
+}
 
-    
+async function goNext() {
+    window.location.href = '/pilotPage';
 }

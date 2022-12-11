@@ -2,20 +2,24 @@
 <head>
     <meta charset = "UTF-8">
     <title>Minimum Viable Product</title>
+    <script src="scripts/verify.js" defer></script>
     <script src="scripts/login_manager.js" defer></script>
 </head>
 <body>
     <div id="container">
         <h1 id = "title">Manager Login Page</h1>
     </div>
-
-    <div id="loginText">
-        <label for="Name">Username:</label>
-        <input type="text" id="Name" name="Name" placeholder="Enter Username">
+    <div id="deny">
+        <div id="loginText">
+            <label for="Name">Username:</label>
+            <input type="text" id="Name" name="Name" placeholder="Enter Username">
+            <p id="login_message"></p>
+        </div>
+        <div id="login_div">
+            <input type="button" id="login_button" name="login_button" value="Login">
+        </div>
     </div>
-
-    <div id="first_query">
-        <input type="button" id="login_button" name="login_button" value="Login">
-        <p id="login_message">Change this</p>
+    <div hidden id="allow">
+        <p>You are already signed in</p>
     </div>
 </body>

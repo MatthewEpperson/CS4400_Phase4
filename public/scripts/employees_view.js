@@ -1,9 +1,14 @@
+var authenticated = false;
+var user;
+
+
 function displaySelect() {
     let xhr = new XMLHttpRequest
     xhr.addEventListener("load", displaySelectHandler)
     xhr.responseType="json";
-    xhr.open("GET", "/display-employee-view")
-    xhr.send();
+    xhr.open("POST", "/display-employee-view")
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xhr.send(`serviceId=${user.serviceId}`);
 }
 
 document.getElementById("hireSubmit").addEventListener("click", submitHandler)
@@ -127,8 +132,8 @@ document.getElementById('clearBtn').onclick = function() {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-    
-    displaySelect();
+    user = getUser()
+    // displaySelect();
 
 });
 
@@ -142,7 +147,7 @@ function fireEmployee(username) {
     url = "/fire-employee"
     xhr.open("POST", url)
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
-    xhr.send(`username=${username}&id=${id}`);
+    xhr.send(`serviceId=${user.serviceId}`);
 }
 
 function fireHandler() {
@@ -173,4 +178,44 @@ function hireHandler() {
 
     clearTable("employeeTable")
     displaySelect()
+}
+
+function getUser() {
+
+    let xml = new XMLHttpRequest
+    xml.responseType = "json"
+    xml.addEventListener("load", getUserHandler)
+    let url = '/get-user'
+    xml.open("GET", url)
+    xml.send()
+
+}
+
+function getUserHandler() {
+
+    if (this.response.success) {
+        console.log(JSON.stringify(this.response))
+        user = this.response.user
+        check()
+        displaySelect();
+    } else {
+        console.log(this.response.message)
+        check()
+    }
+
+}
+
+function check() {
+    console.log(JSON.stringify(user))
+    console.log(user.type)
+    if (user.type) {
+        if (user.type == 1) {
+            document.getElementById("allow").removeAttribute("hidden")
+            document.getElementById("deny").setAttribute("hidden", true)
+        }
+
+    } else {
+        document.getElementById("deny").removeAttribute("hidden")
+        document.getElementById("body").setAttribute("hidden", true)
+    }
 }

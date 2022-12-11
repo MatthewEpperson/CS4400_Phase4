@@ -2,10 +2,41 @@
 <head>
     <meta charset = "UTF-8">
     <title>Minimum Viable Product</title>
-    <script src="scripts/pilotPage.js" defer></script>
+    <script src="scripts/pilotPage.js" defer>
+        // window.onload = loadIngredientData;
+    </script>
+    <link rel="stylesheet" href="styles/pilotPage.css">
 </head>
 <body>
     <div id="container">
-        <h1 id = "title">Pilot Task</h1>
+        <h1 id = "title">Pilot Dashboard</h1>
+    </div>
+    <div id="droneDiv">
+        <h1 id = "title">Drones</h1>
+        <input type="text" id="pilotUsername" placeholder="Pilot To Takeover Drone">
+        <input type="text" id="recDroneID" placeholder="Drone ID to Follow">
+        <input type="text" id="recDroneTag" placeholder="Drone tag to Follow">
+        <input type="text" id="targetLocation" placeholder="Target Destination">
+        <table id="droneTable" class="sortable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tag</th>
+                    <th>Fuel</th>
+                    <th>Capacity</th>
+                    <th>Sales</th>
+                    <th>Flown By</th>
+                    <th>Swarm ID</th>
+                    <th>Swarm Tag</th>
+                    <th>Hover</th>
+                    <th>Fly Drone</th>
+                    <th>Join Swarm</th>
+                    <th>Leave Swarm</th>
+                    <th>Takeover Drone</th>
+                </tr>
+            </thead>
+            <tbody id="testBody"></tbody>
+        </table>
+    </div>
     </div>
 </body>

@@ -14,7 +14,7 @@ const connection = mysql.createConnection({
 
     host: "localhost",
     user: "root",
-    password: "Olaolu5796",
+    password: "asdqwe123",
     database: "restaurant_supply_express"
 
 })
@@ -99,6 +99,81 @@ app.post("/attempt-load-drone", function(req, res) {
 })
 
 
+app.post("/attempt-fly-drone", function(req, res) {
+    let flyDrone = 'call fly_drone(?, ?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(flyDrone, [
+        req.body.droneID,
+        req.body.droneTag,
+        req.body.location
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt_fly-drone"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully flown drone"})
+            console.log("Drone got flown!")
+        }
+    })
+})
+
+
+app.post("/attempt-join-swarm", function(req, res) {
+    let joinSwarm = 'call join_swarm(?, ?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(joinSwarm, [
+        req.body.droneID,
+        req.body.droneTag,
+        req.body.swarmTag
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-join-swarm"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully joined swarm"})
+            console.log("Drone joined swarm!")
+        }
+    })
+})
+
+
+app.post("/attempt-leave-swarm", function(req, res) {
+    let leaveSwarm = 'call leave_swarm(?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(leaveSwarm, [
+        req.body.droneID,
+        req.body.droneTag
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-leave-swarm"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully left swarm"})
+            console.log("Drone left swarm!")
+        }
+    })
+})
+
+
+app.post("/attempt-takeover-drone", function(req, res) {
+    let takeoverDrone = 'call takeover_drone(?, ?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(takeoverDrone, [
+        req.body.pilotUsername,
+        req.body.droneID,
+        req.body.droneTag
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-takeover-drone"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully tookover drone"})
+            console.log("pilot is now flying drone")
+        }
+    })
+})
+
+
 app.post("/attempt-register", function(req, res){
     query = "select * from users where username = ?"
     connection.query(query, [req.body.username], function(err, rows) {
@@ -173,6 +248,19 @@ app.get("/update-authenticated", function(req, res) {
 
 app.get("/display-ingredients-view", function(req, res) {
     userQuery = "select * from display_ingredient_view"
+    connection.query(userQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(userQuery);
+            res.json({success: true, data: rows})
+        }
+    })
+})
+
+
+app.get("/display-locations-view", function(req, res) {
+    userQuery = "select * from display_location_view"
     connection.query(userQuery, function(err, rows) {
         if (err) {
             res.json({success: false, message:"database query failed for /display-select"})
@@ -269,6 +357,20 @@ app.get("/display-pilots-view", function(req, res) {
         }
     })
 })
+
+
+app.get("/display-pilots-page", function(req, res) {
+    droneQuery = "select * from drones"
+    connection.query(droneQuery,function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-pilots-page"})
+        } else {
+            console.log(droneQuery);
+            res.json({success: true, drones: rows})
+        }
+    })
+})
+
 
 app.get("/display-services-view", function(req, res) {
     userQuery = "select * from display_service_view"

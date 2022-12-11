@@ -38,7 +38,6 @@ function displaySelectHandler() {
 }
 
 
-
 function clearTable(tableName) {
     const table = document.getElementById(tableName);
 

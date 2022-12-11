@@ -59,7 +59,6 @@ function filterTable() {
     
 }
 
-
 function clearTable() {
     const table = document.getElementById("locationTable");
 

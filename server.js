@@ -1,6 +1,14 @@
 const mysql = require("mysql2")
 const express = require("express")
 const { json } = require("express/lib/response")
+const res = require("express/lib/response")
+
+const USER_TYPE = {
+    Pilot: 0,
+    Manager: 1,
+    Worker: 2,
+    Owner: 3
+  }
 
 
 const app = express()
@@ -238,9 +246,13 @@ app.post("/login-worker", function(req, res) {
             if (rows.length == 0) {
                 res.json({success: false, message: "invalid username or username not found"})
             } else if (rows.length == 1) {
+
                 authenticated = true
-                user.type = 0
+                user.type = USER_TYPE.Worker
                 user.username = req.body.username
+                work_for = getWorkFor(req.body.username)
+                user.serviceId = work_for
+
                 res.json({success: true, message: "successfully signed in"})
             } else if (rows.length > 1) {
                 res.json({success: false, message: "Problem with database: duplicate users"})
@@ -259,10 +271,12 @@ app.post("/login-manager", function(req, res) {
             if (rows.length == 0) {
                 res.json({success: false, message: "invalid username or username not found"})
             } else if (rows.length == 1) {
+
                 authenticated = true
                 user.serviceId = rows[0]["id"]
-                user.type = 2
+                user.type = USER_TYPE.Manager
                 user.username = req.body.username
+
                 res.json({success: true, message: "successfully signed in"})
             } else if (rows.length > 1) {
                 res.json({success: false, message: "Problem with database: duplicate users"})
@@ -281,9 +295,13 @@ app.post("/login-pilot", function(req, res) {
             if (rows.length == 0) {
                 res.json({success: false, message: "invalid username or username not found"})
             } else if (rows.length == 1) {
+
                 authenticated = true
-                user.type = 1
+                user.type = USER_TYPE.Pilot
+                work_for = getWorkFor(req.body.username)
+                user.serviceId = work_for
                 user.username = req.body.username
+
                 res.json({success: true, message: "successfully signed in"})
             } else if (rows.length > 1) {
                 res.json({success: false, message: "Problem with database: duplicate users"})
@@ -304,8 +322,11 @@ app.post("/login-owner", function(req, res) {
                 res.json({success: false, message: "invalid username or username not found"})
             } else if (rows.length == 1) {
                 authenticated = true
-                user.type = 2
+
+                user.type = USER_TYPE.Owner
                 user.username = req.body.username
+                user.restaurants = getRestaurants(req.body.username)
+
                 res.json({success: true, message: "successfully signed in"})
             } else if (rows.length > 1) {
                 res.json({success: false, message: "Problem with database: duplicate users"})
@@ -396,6 +417,7 @@ app.post("/attempt-register", function(req, res){
                                 res.json({success: false, message: "database insert failed for /attempt_register (owner)"})
                             } else {
                                 authenticated = true;
+                                user.type = 2
                                 user.username = req.body.username
                                 res.json({success: true, message: "successfully added owner", user: user})
                             }
@@ -464,14 +486,15 @@ app.get("/display-locations-view", function(req, res) {
 })
 
 
-app.get("/display-employee-view", function(req, res) {
+app.post("/display-employee-view", function(req, res) {
+    console.log("in /display-employee-view")
     userQuery = "select * from display_employee_view where username in (select username from work_for where binary id = binary ?) and manager_status = 'NO' collate utf8mb4_unicode_ci"
-    connection.query(userQuery, ["rr"], function(err, rows) {
+    console.log(JSON.stringify(req.body))
+    connection.query(userQuery, [req.body.serviceId], function(err, rows) {
         if (err) {
             console.log(err.message)
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
-            console.log(userQuery);
             res.json({success: true, data: rows})
         }
     })
@@ -678,6 +701,15 @@ app.get("/locations_view", function(req, res){
 app.get("/employees_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "employees_view.html");
 })
+
+app.get("/manageEmployeesPage", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "employees_view.html");
+})
+
+app.get("/get-user", function(req, res) {
+    res.json({success: authenticated, user: user})
+})
+
 app.get("/adminPage", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "adminPage.html");
 })
@@ -708,3 +740,29 @@ app.get("/managerPage", function(req, res){
 app.get("/ownerPage", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "ownerPage.html");
 })
+
+function getWorkFor(username) {
+    let command = "select id from work_for where username = ?"
+    connection.query(command, [username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+        } else {
+            let result = []
+            length = rows.length
+            for (let i = 0; i < length; i++) {
+                result.push(rows[i])
+            }
+        }
+    })
+}
+
+function getRestaurants(username) {
+    let command = "SELECT * FROM restaurant_supply_express.restaurants where funded_by = ?;"
+    connection.query(command, [username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+        } else {
+            return rows
+        }
+    })
+}

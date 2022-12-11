@@ -11,6 +11,11 @@ let ingredientData = null;
 let deliveryServiceData = null;
 let payload = null;
 
+let ingredient_map = new Map()
+let payload_map = new Map()
+let drone_map = new Map()
+let ds_map = new Map()
+
 function displaySelectHandler() {
     if (this.response.success) {
         console.log("SUCCESSSS");
@@ -19,17 +24,41 @@ function displaySelectHandler() {
             let data = this.response.drones;
             let ingredientData = this.response.ingredients;
             deliveryServiceData = this.response.deliveryServices;
+            console.log(deliveryServiceData)
             droneData = data;
             payload = this.response.payload
+
+            ds_map.clear()
+            for (let i = 0; i < deliveryServiceData.length; i++) {
+                ds_map.set(deliveryServiceData[i].id, deliveryServiceData[i].home_base)
+            }
+
+
+            drone_map.clear()
             for (let i = 0; i < data.length; i++) {
                 populateTable(data[i], "droneTable");
+                drone_map.set(data[i].id + data[i].tag, data[i].capacity)
             }
+
+            ingredient_map.clear()
             for (let i = 0; i < ingredientData.length; i++) {
                 populateTable(ingredientData[i], "ingredientTable");
+                ingredient_map.set(ingredientData[i].barcode, {iname: ingredientData[i].iname, weight: ingredientData[i].weight})
             }
+
+            
+            payload_map.clear()
             for (let i = 0; i < payload.length; i++) {
                 populateTable(payload[i], "payloadTable")
+                if (payload_map.has((payload[i].id + payload[i].tag))) {
+                    payload_map.set((payload[i].id + payload[i].tag), payload_map.get((payload[i].id + payload[i].tag)) + payload[i].quantity)
+                } else {
+                    payload_map.set((payload[i].id + payload[i].tag), parseInt(payload[i].quantity))
+
+                }
+
             }
+            console.log(payload_map)
         }
     } else {
         console.log("FAILURE");
@@ -81,11 +110,12 @@ function populateTable(items, tableName) {
         let refuelBtn = document.createElement("button");
         let fuelInput = document.createElement("input");
 
-        packagePriceInput.type = "text"
+        packagePriceInput.type = "number"
         barcodeInput.type = "text"
-        packageAmtInput.type = "text"
+        packageAmtInput.type = "number"
         loadBtn.innerText = "Load Drone"
-        fuelInput.type = "text";
+        loadBtn.id = `${items['hover']}`;
+        fuelInput.type = "number";
         fuelInput.placeholder = "Fuel Amount";
         fuelInput.id = `Fuel ${items['id']} ${items['tag']}`;
 
@@ -102,7 +132,7 @@ function populateTable(items, tableName) {
         };
 
         loadBtn.onclick = function() {
-            loadDrone(fuelInput.id)
+            loadDrone(fuelInput.id, loadBtn.id)
         }
 
         colName.appendChild(fuelInput);
@@ -114,14 +144,32 @@ function populateTable(items, tableName) {
     }
 }
 
-function loadDrone(drone) {
+function loadDrone(drone, location) {
     let droneSplit = drone.split(" ");
-    // console.log(droneSplit)
+    console.log(location)
     let droneID = droneSplit[1]
     let droneTag = droneSplit[2]
     let barcode = document.getElementById(`barcode ${droneID} ${droneTag}`)
-    let price = document.getElementById(`price ${droneID} ${droneTag}`)
+
+    if (!ingredient_map.has(barcode.value)) {
+        alert("invalid ingredient")
+        return
+    }
+    
     let amount = document.getElementById(`amount ${droneID} ${droneTag}`)
+    if ((parseInt(amount.value) + payload_map.get(droneID + droneTag)) > drone_map.get(droneID + droneTag)) {
+        alert("too heavy for drone to carry")
+        return
+    }
+
+    // get hover location from table
+
+    if (location != ds_map.get(droneID)) {
+        alert("drone is not at its homebase")
+        return
+    }
+
+    let price = document.getElementById(`price ${droneID} ${droneTag}`)
 
     // console.log(`${barcode.value} ${price.value} ${amount.value} ${droneID} ${droneTag}`)
 
@@ -141,9 +189,10 @@ function refuelDrone(drone, currAmt, hover) {
     let droneSplit = drone.split(" ");
     let droneID = droneSplit[1];
     let droneTag = droneSplit[2];
-    console.log(droneID)
 
-    console.log(currAmt);
+    console.log(droneID)
+    console.log(currAmt)
+    
     let information = `droneid=${droneID}&dronetag=${droneTag}&fuel_amount=${fuelAmt.value}`
     
     let refuelSuccess = false

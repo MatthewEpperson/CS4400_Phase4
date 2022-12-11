@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
 
     host: "localhost",
     user: "root",
-    password: "Olaolu5796",
+    password: "password",
     database: "restaurant_supply_express"
 
 })
@@ -53,6 +53,20 @@ app.get("/attempt-login", function(req, res) {
             }
         }
     })
+})
+
+
+app.get("/display-drones-view", function(req, res) {
+    userQuery = "select * from drones"
+    let drones;
+    connection.query(userQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-drones-view"})
+        } else {
+            drones = rows
+            res.json({success: true, drones: drones})
+            }
+        })
 })
 
 
@@ -119,6 +133,28 @@ app.post("/attempt-fly-drone", function(req, res) {
 })
 
 
+app.post("/attempt-add-drone", function(req, res) {
+    let addDrone = 'call add_drone(?, ?, ?, ?, ?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(addDrone, [
+        req.body.droneID,
+        req.body.droneTag,
+        req.body.droneFuel,
+        req.body.droneCapacity,
+        req.body.droneSales,
+        req.body.droneFlownBy
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-add-drone"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully added drone"})
+            console.log("Drone added!")
+        }
+    })
+})
+
+
 app.post("/attempt-join-swarm", function(req, res) {
     let joinSwarm = 'call join_swarm(?, ?, ?)'
     console.log(JSON.stringify(req.body))
@@ -156,6 +192,24 @@ app.post("/attempt-leave-swarm", function(req, res) {
 })
 
 
+app.post("/attempt-remove-drone", function(req, res) {
+    let removeDrone = 'call remove_drone(?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(removeDrone, [
+        req.body.droneID,
+        req.body.droneTag
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-remove-drone"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully removed drone"})
+            console.log("Drone removed!")
+        }
+    })
+})
+
+
 app.post("/attempt-takeover-drone", function(req, res) {
     let takeoverDrone = 'call takeover_drone(?, ?, ?)'
     console.log(JSON.stringify(req.body))
@@ -170,6 +224,127 @@ app.post("/attempt-takeover-drone", function(req, res) {
         } else {
             res.json({success: true, message: "successfully tookover drone"})
             console.log("pilot is now flying drone")
+        }
+    })
+})
+
+app.post("/login-worker", function(req, res) {
+    let command = "select * from workers where username = ? and username not in (select manager from delivery_services)"
+    connection.query(command, [req.body.username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+            res.json({success: false, message: err.message})
+        } else {
+            if (rows.length == 0) {
+                res.json({success: false, message: "invalid username or username not found"})
+            } else if (rows.length == 1) {
+                authenticated = true
+                user.type = 0
+                user.username = req.body.username
+                res.json({success: true, message: "successfully signed in"})
+            } else if (rows.length > 1) {
+                res.json({success: false, message: "Problem with database: duplicate users"})
+            }
+        }
+    })
+})
+
+app.post("/login-manager", function(req, res) {
+    let command = "select * from delivery_services where manager = ?"
+    connection.query(command, [req.body.username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+            res.json({success: false, message: err.message})
+        } else {
+            if (rows.length == 0) {
+                res.json({success: false, message: "invalid username or username not found"})
+            } else if (rows.length == 1) {
+                authenticated = true
+                user.serviceId = rows[0]["id"]
+                user.type = 2
+                user.username = req.body.username
+                res.json({success: true, message: "successfully signed in"})
+            } else if (rows.length > 1) {
+                res.json({success: false, message: "Problem with database: duplicate users"})
+            }
+        }
+    })
+})
+
+app.post("/login-pilot", function(req, res) {
+    let command = "select * from pilots where username = ? and username not in (select manager from delivery_services)"
+    connection.query(command, [req.body.username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+            res.json({success: false, message: err.message})
+        } else {
+            if (rows.length == 0) {
+                res.json({success: false, message: "invalid username or username not found"})
+            } else if (rows.length == 1) {
+                authenticated = true
+                user.type = 1
+                user.username = req.body.username
+                res.json({success: true, message: "successfully signed in"})
+            } else if (rows.length > 1) {
+                res.json({success: false, message: "Problem with database: duplicate users"})
+            }
+        }
+    })
+})
+
+app.post("/login-owner", function(req, res) {
+    let command = "select * from restaurant_owners where username = ?"
+    console.log(JSON.stringify(req.body))
+    connection.query(command, [req.body.username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+            res.json({success: false, message: err.message})
+        } else {
+            if (rows.length == 0) {
+                res.json({success: false, message: "invalid username or username not found"})
+            } else if (rows.length == 1) {
+                authenticated = true
+                user.type = 2
+                user.username = req.body.username
+                res.json({success: true, message: "successfully signed in"})
+            } else if (rows.length > 1) {
+                res.json({success: false, message: "Problem with database: duplicate users"})
+            }
+        }
+    })
+})
+
+
+app.post("/attempt-add-ingredient", function(req, res) {
+    let addIngredient = 'call add_ingredient(?, ?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(addIngredient, [
+        req.body.barcode,
+        req.body.name,
+        req.body.weight
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-add-ingredient"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully added ingredient"})
+            console.log("ingredient was added")
+        }
+    })
+})
+
+
+app.post("/attempt-remove-ingredient", function(req, res) {
+    let removeIngredient = 'call remove_ingredient(?)'
+    connection.query(removeIngredient, [
+        req.body.barcode
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-remove-ingredient"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully removed ingredient"})
+            console.log("ingredient was removed")
         }
     })
 })
@@ -250,12 +425,26 @@ app.get("/update-authenticated", function(req, res) {
 
 app.get("/display-ingredients-view", function(req, res) {
     userQuery = "select * from display_ingredient_view"
+    ingredientQuery = "select * from ingredients"
+
+    let ingredientView;
     connection.query(userQuery, function(err, rows) {
         if (err) {
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
+            ingredientView = rows
             console.log(userQuery);
-            res.json({success: true, data: rows})
+        }
+    })
+
+    let ingredients;
+    connection.query(ingredientQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            ingredients = rows
+            console.log(ingredientQuery);
+            res.json({success: true, ingredientView: ingredientView, ingredients: ingredients})
         }
     })
 })
@@ -356,7 +545,6 @@ app.get("/display-drones", function(req, res) {
         if (err) {
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
-            console.log(userQuery);
             drones = rows
             // res.json({success: true, data: rows})
         }
@@ -471,6 +659,10 @@ app.get("/owners_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "owners_view.html");
 })
 
+app.get("/drones_view", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "drones_view.html");
+})
+
 app.get("/manage_drone", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "manage_drone.html");
 })
@@ -505,7 +697,7 @@ app.get("/loginOwner", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "loginOwner.html");
 })
 app.get("/workerPage", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "workerPage.html");
+    res.sendFile(__dirname + "/public/views/" + "manage_drone.html");
 })
 app.get("/pilotPage", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "pilotPage.html");
@@ -516,13 +708,3 @@ app.get("/managerPage", function(req, res){
 app.get("/ownerPage", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "ownerPage.html");
 })
-app.get("/manageServicePage", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "manageServicePage.html");
-})
-app.get("/manageEmployeesPage", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "manageEmployeesPage.html");
-})
-app.get("/newRestaurant", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "newRestaurant.html");
-})
-

@@ -1,12 +1,15 @@
 table {
     overflow-y:scroll;
    height:250px;
-   display:inline-block;
+   display: inline-block;
 }
 
-#ingredientDiv, #ingredientDiv2 {
+#droneDiv {
+    display: inline-block;
     text-align: center;
+    padding-left: 50px;
 }
+
 
 #container{
     text-align: center;

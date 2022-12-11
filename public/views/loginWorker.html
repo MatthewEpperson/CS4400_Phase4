@@ -2,7 +2,7 @@
 <head>
     <meta charset = "UTF-8">
     <title>Minimum Viable Product</title>
-    <script src="scripts/loginWorker.js" defer></script>
+    <script src="scripts/login_worker.js" defer></script>
 </head>
 <body>
     <div id="container">
@@ -13,12 +13,10 @@
         <label for="Name">Username:</label>
         <input type="text" id="Name" name="Name" placeholder="Enter Username">
     </div>
+
     <div id="first_query">
-        <label id="query_label" for="query_input">
-            
-        </label>
-        <!-- this button should take string value in text box and check with database if it is in the valid employee subclass  -->
-        <input type="button" id="query_input" name="query_input" value="Login" onclick="location.href='manage_drone';">
-        <p id="select_output"></p>
-</div>
+        <input type="button" id="login_button" name="login_button" value="Login">
+        <p id="login_message">Change this</p>
+    </div>
+
 </body>

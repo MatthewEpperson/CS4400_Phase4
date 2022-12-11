@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<head>
+    <meta charset = "UTF-8">
+    <title>Minimum Viable Product</title>
+    <script src="scripts/newRestaurant.js" defer></script>
+</head>
+<body>
+    <div id="container">
+        <h1 id = "title">Add Restaurant</h1>
+    </div>
+
+    <div id="addedText">
+        <label for="Name">Name</label>
+        <input type="text" id="Name" name="Name" placeholder="Restaurant Name">
+        <label for="Name">Rating</label>
+        <input type="text" id="Name" name="Name" placeholder="1 - 5 rating">
+        <label for="Name">Spent</label>
+        <input type="text" id="Name" name="Name" placeholder="spent">
+        <label for="Name">Location</label>
+        <input type="text" id="Name" name="Name" placeholder="location">
+    </div>
+    <div id="first_query">
+        <label id="query_label" for="query_input">
+            
+        </label>
+        <!-- this button should take string value in text box and check with database if it is in the valid employee subclass  -->
+        <input type="button" id="query_input" name="query_input" value="Add" onclick="location.href='owner';">
+        <p id="select_output"></p>
+    </div>
+</body>

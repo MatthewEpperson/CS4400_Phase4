@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
 
     host: "localhost",
     user: "root",
-    password: "asdqwe123",
+    password: "Olaolu5796",
     database: "restaurant_supply_express"
 
 })
@@ -516,3 +516,13 @@ app.get("/managerPage", function(req, res){
 app.get("/ownerPage", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "ownerPage.html");
 })
+app.get("/manageServicePage", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "manageServicePage.html");
+})
+app.get("/manageEmployeesPage", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "manageEmployeesPage.html");
+})
+app.get("/newRestaurant", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "newRestaurant.html");
+})
+

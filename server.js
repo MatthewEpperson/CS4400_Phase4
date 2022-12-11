@@ -247,6 +247,24 @@ app.post("/attempt-add-ingredient", function(req, res) {
 })
 
 
+app.post("/attempt-fund-restaurant", function(req, res) {
+    let fundRestaurant = 'call start_funding(?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(fundRestaurant, [
+        req.body.owner,
+        req.body.longName,
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-fund-restaurant"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully funded ingredient"})
+            console.log("restaurant was funded")
+        }
+    })
+})
+
+
 app.post("/attempt-remove-ingredient", function(req, res) {
     let removeIngredient = 'call remove_ingredient(?)'
     connection.query(removeIngredient, [
@@ -357,6 +375,19 @@ app.get("/display-ingredients-view", function(req, res) {
             ingredients = rows
             console.log(ingredientQuery);
             res.json({success: true, ingredientView: ingredientView, ingredients: ingredients})
+        }
+    })
+})
+
+
+app.get("/display-owner", function(req, res) {
+    userQuery = "select * from restaurants"
+    connection.query(userQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(userQuery);
+            res.json({success: true, restaurants: rows})
         }
     })
 })
@@ -486,6 +517,7 @@ app.get("/display-services-view", function(req, res) {
         }
     })
 })
+
 
 app.get("/main", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "index.html");

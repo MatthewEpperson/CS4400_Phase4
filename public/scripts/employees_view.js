@@ -6,6 +6,20 @@ function displaySelect() {
     xhr.send();
 }
 
+document.getElementById("hireSubmit").addEventListener("click", submitHandler)
+
+function submitHandler() {
+
+    let prospective_element = document.getElementById("hireUsernameText")
+    let prospective = prospective_element.value
+    if (prospective == 0) {
+    } else {
+        hireEmployee(prospective)
+        prospective_element.value = ""
+    }
+
+}
+
 let employeeData = null;
 
 function displaySelectHandler() {
@@ -85,6 +99,15 @@ function populateTable(items) {
         }
         colName.innerHTML = items[attribute];
     }
+    let colName = row.insertCell(itemKeys.length)
+    let btn = document.createElement("button")
+    btn.id = `${items["username"]}`
+    btn.innerText = "Delete Employee"
+    btn.onclick = function() {
+        fireEmployee(btn.id)
+    }
+
+    colName.appendChild(btn)
 }
 
 
@@ -104,7 +127,50 @@ document.getElementById('clearBtn').onclick = function() {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
+    
     displaySelect();
-  });
 
-document.getElementById("query_input").addEventListener("click", displaySelect);
+});
+
+function fireEmployee(username) {
+    console.log(username)
+    // id = user.id
+    let id = "rr"
+    let xhr = new XMLHttpRequest
+    xhr.addEventListener("load", fireHandler)
+    xhr.responseType= "json";
+    url = "/fire-employee"
+    xhr.open("POST", url)
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xhr.send(`username=${username}&id=${id}`);
+}
+
+function fireHandler() {
+    clearTable("employeeTable")
+    displaySelect()
+}
+
+function hireEmployee(username) {
+    // id = user.id
+    console.log("HIRING EMPLOYEE")
+    let id = "rr"
+    let xhr = new XMLHttpRequest
+    xhr.addEventListener("load", hireHandler)
+    xhr.responseType= "json";
+    url = "/hire-employee"
+    xhr.open("POST", url)
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xhr.send(`username=${username}&id=${id}`);
+}
+
+function hireHandler() {
+
+    if (this.response.message) {
+        let message = this.response.message
+        document.getElementById("message").value = message
+    }
+
+
+    clearTable("employeeTable")
+    displaySelect()
+}

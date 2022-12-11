@@ -23,8 +23,6 @@ document.getElementById("log-out-button").addEventListener("click", function(eve
     check();
 })
 
-
-
 function serverCheck() {
     if (this.response.success) {
         console.log("good response from update-authenticated");
@@ -36,21 +34,12 @@ function serverCheck() {
 function authenticator() {
     if (this.response.success) {
         authenticated = true;
-        currUser = this.response.user;
+        currUser = this.response.user.username;
     } else {
         authenticated = false;    }
     check();
 }
 
-function check() {
-    if (authenticated) {
-        document.getElementById("registration_form").setAttribute("hidden", true);
-        document.getElementById("log-out-button").removeAttribute("hidden");
-    } else {
-        document.getElementById("registration_form").removeAttribute("hidden");
-        document.getElementById("log-out-button").setAttribute("hidden", true)
-    }
-}
 let select_input = document.getElementById("type_input")
 select_input.onchange = selectHandler
 let form = document.getElementById("registration_form")
@@ -147,5 +136,15 @@ function getQuery() {
         result += `&experience=${document.getElementById("experience_input").value}`
         result += `&taxID=${document.getElementById("tax_input").value}`
         return result
+    }
+}
+
+function check() {
+    if (authenticated) {
+        document.getElementById("registration_form").setAttribute("hidden", true)
+        document.getElementById("log-out-button").removeAttribute("hidden")
+    } else {
+        document.getElementById("registration_form").removeAttribute("hidden")
+        document.getElementById("log-out-button").setAttribute("hidden", true)
     }
 }

@@ -4,7 +4,8 @@ const { json } = require("express/lib/response")
 
 
 const app = express()
-authenticated = false;
+let authenticated = false;
+let user = {} 
 
 app.use(express.urlencoded({
     extended: false
@@ -219,7 +220,9 @@ app.post("/attempt-register", function(req, res){
                                 console.log(err.message)
                                 res.json({success: false, message: "database insert failed for /attempt_register (owner)"})
                             } else {
-                                res.json({success: true, message: "successfully added owner"})
+                                authenticated = true;
+                                user.username = req.body.username
+                                res.json({success: true, message: "successfully added owner", user: user})
                             }
                         })
                 } else {
@@ -231,9 +234,8 @@ app.post("/attempt-register", function(req, res){
 })
 
 app.get("/checkedLoggedIn", function(req, res) { 
-    // console.log("Server received POST to /checkedLoggedIn...");
     if (authenticated) {
-        res.json({success: true, message: "User is signed in", user: currUser})
+        res.json({success: true, message: "User is signed in", user: user})
     } else {
         res.json({success: false, message: "User not signed in"})
     }
@@ -273,9 +275,10 @@ app.get("/display-locations-view", function(req, res) {
 
 
 app.get("/display-employee-view", function(req, res) {
-    userQuery = "select * from display_employee_view"
-    connection.query(userQuery, function(err, rows) {
+    userQuery = "select * from display_employee_view where username in (select username from work_for where binary id = binary ?) and manager_status = 'NO' collate utf8mb4_unicode_ci"
+    connection.query(userQuery, ["rr"], function(err, rows) {
         if (err) {
+            console.log(err.message)
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
             console.log(userQuery);
@@ -284,6 +287,50 @@ app.get("/display-employee-view", function(req, res) {
     })
 })
 
+app.post("/fire-employee", function(req, res) {
+    connection.query("select * from employees where username = binary ? collate utf8mb4_unicode_ci;",
+    [req.body.username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+            res.json({success: false, message: "error in finding your employees"})
+        } else {
+            console.log(JSON.stringify(req.body))
+            connection.query("call fire_employee(?, ?);",
+            [req.body.username, req.body.id], function(err, rows) {
+                if (err) {
+                    console.log(err.message)
+                    res.json({success: false, message: "error in firing employee"})
+                } else {
+                    res.json({success: true, message: "successfully fired employee"})
+                }
+            })
+        }
+    })
+})
+
+app.post("/hire-employee", function(req, res) {
+    console.log("in /hire-employee")
+    connection.query("select * from users where username = binary ? collate utf8mb4_unicode_ci;",
+    [req.body.username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+            console.log("ERROR IN FINDING EMPLOYEE")
+            res.json({success: false, message: `error in finding employee with username=${req.body.username}`})
+        } else {
+            console.log(JSON.stringify(req.body))
+            connection.query("call hire_employee(?, ?)",
+            [req.body.username, req.body.id], function(err, rows) {
+                if (err) {
+                    console.log("ERROR IN HIRING EMPLOYEE")
+                    console.log(err.message)
+                    res.json({success: false, message: "error in hiring employee"})
+                } else {
+                    res.json({success: true, message: "successfully firing employee"})
+                }
+            })
+        }
+    })
+})
 
 app.get("/display-owners-view", function(req, res) {
     userQuery = "select * from display_owner_view"
@@ -313,6 +360,7 @@ app.get("/display-drones", function(req, res) {
             // res.json({success: true, data: rows})
         }
     })
+
     let ingredients;
     connection.query(ingredientsQuery, function(err, rows) {
         if (err) {

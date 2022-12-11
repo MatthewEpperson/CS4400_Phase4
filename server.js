@@ -143,6 +143,7 @@ app.get("/display-employee-view", function(req, res) {
     userQuery = "select * from display_employee_view"
     connection.query(userQuery, function(err, rows) {
         if (err) {
+            console.log(err.message)
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
             console.log(userQuery);
@@ -207,6 +208,7 @@ app.get("/display-services-view", function(req, res) {
     userQuery = "select * from display_service_view"
     connection.query(userQuery, function(err, rows) {
         if (err) {
+            console.log(err.message)
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
             console.log(userQuery);

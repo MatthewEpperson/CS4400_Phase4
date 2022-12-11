@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
 
     host: "localhost",
     user: "root",
-    password: "asdqwe123",
+    password: "password",
     database: "restaurant_supply_express"
 
 })
@@ -170,6 +170,92 @@ app.post("/attempt-takeover-drone", function(req, res) {
         } else {
             res.json({success: true, message: "successfully tookover drone"})
             console.log("pilot is now flying drone")
+        }
+    })
+})
+
+app.post("/login-worker", function(req, res) {
+    let command = "select * from workers where username = ? and username not in (select manager from delivery_services)"
+    connection.query(command, [req.body.username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+            res.json({success: false, message: err.message})
+        } else {
+            if (rows.length == 0) {
+                res.json({success: false, message: "invalid username or username not found"})
+            } else if (rows.length == 1) {
+                authenticated = true
+                user.type = 0
+                user.username = req.body.username
+                res.json({success: true, message: "successfully signed in"})
+            } else if (rows.length > 1) {
+                res.json({success: false, message: "Problem with database: duplicate users"})
+            }
+        }
+    })
+})
+
+app.post("/login-manager", function(req, res) {
+    let command = "select * from delivery_services where manager = ?"
+    connection.query(command, [req.body.username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+            res.json({success: false, message: err.message})
+        } else {
+            if (rows.length == 0) {
+                res.json({success: false, message: "invalid username or username not found"})
+            } else if (rows.length == 1) {
+                authenticated = true
+                user.serviceId = rows[0]["id"]
+                user.type = 2
+                user.username = req.body.username
+                res.json({success: true, message: "successfully signed in"})
+            } else if (rows.length > 1) {
+                res.json({success: false, message: "Problem with database: duplicate users"})
+            }
+        }
+    })
+})
+
+app.post("/login-pilot", function(req, res) {
+    let command = "select * from pilots where username = ? and username not in (select manager from delivery_services)"
+    connection.query(command, [req.body.username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+            res.json({success: false, message: err.message})
+        } else {
+            if (rows.length == 0) {
+                res.json({success: false, message: "invalid username or username not found"})
+            } else if (rows.length == 1) {
+                authenticated = true
+                user.type = 1
+                user.username = req.body.username
+                res.json({success: true, message: "successfully signed in"})
+            } else if (rows.length > 1) {
+                res.json({success: false, message: "Problem with database: duplicate users"})
+            }
+        }
+    })
+})
+
+app.post("/login-owner", function(req, res) {
+    let command = "select * from restaurant_owners where username = ?"
+    console.log(JSON.stringify(req.body))
+    connection.query(command, [req.body.username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+            res.json({success: false, message: err.message})
+        } else {
+            if (rows.length == 0) {
+                res.json({success: false, message: "invalid username or username not found"})
+            } else if (rows.length == 1) {
+                authenticated = true
+                user.type = 2
+                user.username = req.body.username
+                res.json({success: true, message: "successfully signed in"})
+            } else if (rows.length > 1) {
+                res.json({success: false, message: "Problem with database: duplicate users"})
+            }
         }
     })
 })

@@ -491,7 +491,6 @@ app.get("/display-drones", function(req, res) {
         if (err) {
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
-            console.log(userQuery);
             drones = rows
             // res.json({success: true, data: rows})
         }
@@ -640,7 +639,7 @@ app.get("/loginOwner", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "loginOwner.html");
 })
 app.get("/workerPage", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "workerPage.html");
+    res.sendFile(__dirname + "/public/views/" + "manage_drone.html");
 })
 app.get("/pilotPage", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "pilotPage.html");

@@ -4,8 +4,8 @@ const { json } = require("express/lib/response")
 
 
 const app = express()
-authenticated = false;
-user = {}
+let authenticated = false;
+let user = {} 
 
 app.use(express.urlencoded({
     extended: false
@@ -142,7 +142,7 @@ app.get("/display-ingredients-view", function(req, res) {
 
 
 app.get("/display-employee-view", function(req, res) {
-    userQuery = "select * from display_employee_view where username in (select username from work_for where id = ?) and manager_status = 'NO'"
+    userQuery = "select * from display_employee_view where username in (select username from work_for where binary id = binary ?) and manager_status = 'NO' collate utf8mb4_unicode_ci"
     connection.query(userQuery, ["rr"], function(err, rows) {
         if (err) {
             console.log(err.message)
@@ -154,6 +154,50 @@ app.get("/display-employee-view", function(req, res) {
     })
 })
 
+app.post("/fire-employee", function(req, res) {
+    connection.query("select * from employees where username = binary ? collate utf8mb4_unicode_ci;",
+    [req.body.username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+            res.json({success: false, message: "error in finding your employees"})
+        } else {
+            console.log(JSON.stringify(req.body))
+            connection.query("call fire_employee(?, ?);",
+            [req.body.username, req.body.id], function(err, rows) {
+                if (err) {
+                    console.log(err.message)
+                    res.json({success: false, message: "error in firing employee"})
+                } else {
+                    res.json({success: true, message: "successfully fired employee"})
+                }
+            })
+        }
+    })
+})
+
+app.post("/hire-employee", function(req, res) {
+    console.log("in /hire-employee")
+    connection.query("select * from users where username = binary ? collate utf8mb4_unicode_ci;",
+    [req.body.username], function(err, rows) {
+        if (err) {
+            console.log(err.message)
+            console.log("ERROR IN FINDING EMPLOYEE")
+            res.json({success: false, message: `error in finding employee with username=${req.body.username}`})
+        } else {
+            console.log(JSON.stringify(req.body))
+            connection.query("call hire_employee(?, ?)",
+            [req.body.username, req.body.id], function(err, rows) {
+                if (err) {
+                    console.log("ERROR IN HIRING EMPLOYEE")
+                    console.log(err.message)
+                    res.json({success: false, message: "error in hiring employee"})
+                } else {
+                    res.json({success: true, message: "successfully firing employee"})
+                }
+            })
+        }
+    })
+})
 
 app.get("/display-owners-view", function(req, res) {
     userQuery = "select * from display_owner_view"

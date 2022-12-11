@@ -7,16 +7,23 @@ function displaySelect() {
 }
 
 let ingredientsData = null;
+let ingredientTable = null;
 
 function displaySelectHandler() {
+    clearTable("ingredientTable2")
     if (this.response.success) {
-        console.log("SUCCESSSS");
-        if (this.response.data) {
-            let data = this.response.data;
+        console.log("SUCCESSSS")
+        if (this.response.ingredientView) {
+            let data = this.response.ingredientView;
             ingredientsData = data;
+            ingredientTable = this.response.ingredients;
+            console.log(ingredientTable)
             // document.getElementById("select_output").innerText = JSON.stringify(this.response.data)     }
             for (let i = 0; i < data.length; i++) {
-                populateTable(data[i]);
+                populateTable(data[i], "ingredientTable");
+            }
+            for (let i = 0; i < ingredientTable.length; i++) {
+                populateTable(ingredientTable[i], "ingredientTable2")
             }
         }
     } else {
@@ -30,26 +37,26 @@ function filterTable() {
     let name = document.getElementById('name').value;
     let location = document.getElementById('location').value;
     if (ingredientsData != null) {
-        clearTable();
+        clearTable("ingredientTable");
         for (const ingredient of ingredientsData) {
             console.log(ingredient);
             if (name != "" && location == "") {
                 if (ingredient.ingredient_name == name) {
-                    clearTable();
+                    clearTable("ingredientTable");
                     populateTable(ingredient);
                     break;
                 }
             }
             if (location != "" && name == "") {
                 if (ingredient.location == location) {
-                    clearTable();
+                    clearTable("ingredientTable");
                     populateTable(ingredient);
                     break;
                 }
             }
             if (location != "" && name != "") {
                 if (ingredient.location == location && ingredient.ingredient_name == name) {
-                    clearTable();
+                    clearTable("ingredientTable");
                     populateTable(ingredient);
                     break;
                 }
@@ -61,8 +68,8 @@ function filterTable() {
 }
 
 
-function clearTable() {
-    const table = document.getElementById("ingredientTable");
+function clearTable(tableName) {
+    const table = document.getElementById(tableName);
 
     for (let i = table.rows.length - 1; i > 0; i--) {
         table.deleteRow(i);
@@ -71,8 +78,8 @@ function clearTable() {
 
 
 
-function populateTable(items) {
-    const table = document.getElementById("ingredientTable");
+function populateTable(items, tableName) {
+    const table = document.getElementById(tableName);
 
     let itemKeys = Object.keys(items);
     
@@ -82,6 +89,61 @@ function populateTable(items) {
         let attribute = itemKeys[i];
         colName.innerHTML = items[attribute];
     }
+
+    if (tableName == "ingredientTable2") {
+        let colName = row.insertCell(itemKeys.length)
+        let btn = document.createElement("button")
+        btn.type = 'text'
+        btn.innerText = "Remove Ingredient"
+        btn.id = `${items['barcode']}`
+        btn.onclick = function() {
+            removeIngredient(btn.id)
+        }
+        colName.appendChild(btn)
+    }
+}
+
+function addIngredient(barcode, name, weight) {
+    let information = `barcode=${barcode}&name=${name}&weight=${weight}`
+    addIngredientRequest(information)
+    clearTable("ingredientTable2")
+    displaySelect()
+}
+
+
+function removeIngredient(barcode) {
+    let information = `barcode=${barcode}`
+    removeIngredientRequest(information)
+    clearTable("ingredientTable2")
+    displaySelect()
+}
+
+
+function removeIngredientRequest(information) {
+    let xml = new XMLHttpRequest
+    xml.responseType = "json"
+    xml.addEventListener("load", addIngredientResponse)
+    url = "/attempt-remove-ingredient"
+
+    xml.open("POST", url)
+    xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xml.send(information)
+}
+
+
+function addIngredientRequest(information) {
+    let xml = new XMLHttpRequest
+    xml.responseType = "json"
+    xml.addEventListener("load", addIngredientResponse)
+    url = "/attempt-add-ingredient"
+    
+    xml.open("POST", url)
+    xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xml.send(information)
+}
+
+function addIngredientResponse() {
+
 }
 
 
@@ -93,10 +155,19 @@ document.getElementById('location').onchange = function() {
     filterTable();
 };
 
+
+document.getElementById('submitIngredient').onclick = function() {
+    let barcode = document.getElementById('inputBarcode')
+    let name = document.getElementById('inputIngredientName')
+    let weight = document.getElementById('inputWeight')
+
+    addIngredient(barcode.value, name.value, weight.value)
+}
+
 document.getElementById('clearBtn').onclick = function() {
     document.getElementById('name').value = "";
     document.getElementById('location').value = "";
-    clearTable();
+    clearTable("ingredientTable");
     filterTable();
 };
 

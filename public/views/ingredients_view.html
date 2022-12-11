@@ -3,13 +3,12 @@
     <meta charset = "UTF-8">
     <title>Minimum Viable Product</title>
     <script src="scripts/ingredients_view.js" defer>
-        // window.onload = loadIngredientData;
     </script>
     <link rel="stylesheet" href="styles/ingredients_view.css">
 </head>
 <body>
     <div id="container">
-        <h1 id = "title">Ingredients</h1>
+        <h1 id = "title">Ingredients View</h1>
         <label for="username">Name:</label>
         <input type="text" id="name">
         <label for="taxID">&nbsp &nbsp Location:</label>
@@ -25,6 +24,26 @@
                     <th>Amount Available</th>
                     <th>Low Price</th>
                     <th>High Price</th>
+                </tr>
+            </thead>
+            <tbody id="testBody"></tbody>
+        </table>
+    </div>
+    <div id="ingredientDiv2">
+        <h1>Ingredients Table</h1>
+        <input type="text" id="inputBarcode" placeholder="Barcode to Add">
+        <input type="text" id="inputIngredientName" placeholder="Name of Ingredient">
+        <input type="text" id="inputWeight" placeholder="Weight">
+        <button id="submitIngredient">Add Ingredient</button>
+        <br>
+        <br>
+        <table id="ingredientTable2" class="sortable">
+            <thead>
+                <tr>
+                    <th>Barcode</th>
+                    <th>Name</th>
+                    <th>Weight</th>
+                    <th>Remove Ingredient</th>
                 </tr>
             </thead>
             <tbody id="testBody"></tbody>

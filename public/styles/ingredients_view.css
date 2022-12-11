@@ -4,7 +4,7 @@ table {
    display:inline-block;
 }
 
-#ingredientDiv {
+#ingredientDiv, #ingredientDiv2 {
     text-align: center;
 }
 

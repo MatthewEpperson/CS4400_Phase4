@@ -56,6 +56,20 @@ app.get("/attempt-login", function(req, res) {
 })
 
 
+app.get("/display-drones-view", function(req, res) {
+    userQuery = "select * from drones"
+    let drones;
+    connection.query(userQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-drones-view"})
+        } else {
+            drones = rows
+            res.json({success: true, drones: drones})
+            }
+        })
+})
+
+
 app.post("/attempt-refuel", function(req, res) {
     let refuelDrone = 'call refuel_drone(?, ?, ?);'
     console.log(JSON.stringify(req.body))
@@ -119,6 +133,28 @@ app.post("/attempt-fly-drone", function(req, res) {
 })
 
 
+app.post("/attempt-add-drone", function(req, res) {
+    let addDrone = 'call add_drone(?, ?, ?, ?, ?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(addDrone, [
+        req.body.droneID,
+        req.body.droneTag,
+        req.body.droneFuel,
+        req.body.droneCapacity,
+        req.body.droneSales,
+        req.body.droneFlownBy
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-add-drone"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully added drone"})
+            console.log("Drone added!")
+        }
+    })
+})
+
+
 app.post("/attempt-join-swarm", function(req, res) {
     let joinSwarm = 'call join_swarm(?, ?, ?)'
     console.log(JSON.stringify(req.body))
@@ -151,6 +187,24 @@ app.post("/attempt-leave-swarm", function(req, res) {
         } else {
             res.json({success: true, message: "successfully left swarm"})
             console.log("Drone left swarm!")
+        }
+    })
+})
+
+
+app.post("/attempt-remove-drone", function(req, res) {
+    let removeDrone = 'call remove_drone(?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(removeDrone, [
+        req.body.droneID,
+        req.body.droneTag
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-remove-drone"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully removed drone"})
+            console.log("Drone removed!")
         }
     })
 })
@@ -603,6 +657,10 @@ app.get("/ingredients_view", function(req, res){
 
 app.get("/owners_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "owners_view.html");
+})
+
+app.get("/drones_view", function(req, res){
+    res.sendFile(__dirname + "/public/views/" + "drones_view.html");
 })
 
 app.get("/manage_drone", function(req, res){

@@ -81,9 +81,49 @@ function purchaseIngredient(restaurant) {
     let restaurantName = document.getElementById("inputRestaurant")
     let quantity = document.getElementById("inputQuantity")
 
+    let validRName = false
+    let droneValid = false
+    let droneCapacity = false
+
+    for (let i = 0; i < restaurantData.length; i++) {
+        if (restaurantData[i]['long_name'] == restaurantName.value) {
+            validRName = true
+        }
+
+        for (let j = 0; j < droneData.length; j++) {
+            if (droneData[j]['tag'] == droneTag && droneData[j]['id'] == droneID
+                && droneData[j]['hover'] == restaurantData[i]['location']) {
+                    droneValid = true
+                }
+        }
+    }
+
+    for (let i = 0; i < payloadData.length; i++) {
+        if (payloadData[i]['id'] == droneID && payloadData[i]['tag'] == droneTag) {
+            if (payloadData[i]['quantity'] >= quantity.value) {
+                droneCapacity = true
+            }
+        }
+    }
+
+
+    if (validRName == false) {
+        alert("Restaurant name is invalid or not found!")
+        return
+    }
+
+    if (droneValid == false) {
+        alert("Drone is either not at restaurant location or drone was not found!")
+        return
+    }
+
+    if (droneCapacity == false) {
+        alert("Drone did not have enough items for the amount you wish to purchase!")
+        return
+    }
+
     let information = `restaurant=${restaurantName.value}&droneID=${droneID}&droneTag=${droneTag}` +
                         `&barcode=${barcode}&quantity=${quantity.value}`
-
 
     purchaseIngredientRequest(information)
     clearTable("payloadTable")

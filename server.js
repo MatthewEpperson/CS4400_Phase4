@@ -319,6 +319,26 @@ app.post("/attempt-add-pilot-role", function(req, res) {
 })
 
 
+app.post("/attempt-add-owner", function(req, res) {
+    let addOwner = 'call add_owner(?,?,?,?,?)'
+    connection.query(addOwner, [
+        req.body.username,
+        req.body.fName,
+        req.body.lName,
+        req.body.address,
+        req.body.birthdate
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-add-owner"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully added owner"})
+            console.log("owner was added")
+        }
+    })
+})
+
+
 app.post("/attempt-add-worker-role", function(req, res) {
     let workerRole = 'call add_worker_role(?)'
     connection.query(workerRole, [
@@ -604,13 +624,38 @@ app.get("/display-restaurants", function(req, res) {
 
 
 app.get("/display-owners-view", function(req, res) {
-    userQuery = "select * from display_owner_view"
+    ownerView = "select * from display_owner_view"
+    userQuery = "select * from users"
+    restaurantQuery = "select * from restaurant_owners"
+
+    let ownerViewTable;
+    connection.query(ownerView, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(ownerView);
+            ownerViewTable = rows
+        }
+    })
+
+    let users;
     connection.query(userQuery, function(err, rows) {
         if (err) {
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
             console.log(userQuery);
-            res.json({success: true, data: rows})
+            users = rows
+        }
+    })
+
+    let restaurantOwners;
+    connection.query(restaurantQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(restaurantQuery);
+            restaurantOwners = rows
+            res.json({success: true, ownerViewTable: ownerViewTable, users: users, restaurantOwners: restaurantOwners})
         }
     })
 })

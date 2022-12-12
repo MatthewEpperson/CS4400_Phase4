@@ -7,6 +7,7 @@
     </script>
     <link rel="stylesheet" href="styles/employees_view.css">
 </head>
+<<<<<<< HEAD
 <body id="body">
     <div hidden id="allow">
         <div id="container">
@@ -46,6 +47,63 @@
     </div>
     <div id="deny">
         <p id="message">You are not signed in</p>
+=======
+<body>
+    <div id="container">
+        <h1 id = "title">Employees</h1>
+        <label for="username">Username:</label>
+        <input type="text" id="username">
+        <label for="taxID">&nbsp Tax ID:</label>
+        <input type="text" id="taxID">
+        <label for="inputLicenseID">&nbsp License ID:</label>
+        <input type="text" id="inputLicenseID">
+        <label for="inputExperience">&nbsp Experience:</label>
+        <input type="text" id="inputExperience">
+        <button type="button" id="clearBtn">Clear</button>
+        <button type="button" id="addPilotRole"> Add Pilot Role </button>
+        <button type="button" id="removePilotRole"> Remove Pilot Role </button>
+        <button type="button" id="addWorkerRole"> Add Worker Role </button>
+    </div>
+    <div id="employeeDiv">
+        <table id="employeeTable" class="sortable">
+            <thead>
+                <tr>
+                    <th>username</th>
+                    <th>taxID</th>
+                    <th>salary</th>
+                    <th>hired</th>
+                    <th>employee_experience</th>
+                    <th>licenseID</th>
+                    <th>Piloting Experience</th>
+                    <th>Is Manager</th>
+                </tr>
+            </thead>
+            <tbody id="testBody"></tbody>
+        </table>
+    </div>
+    <div id="workerDiv">
+        <table id="workerTable" class="sortable">
+            <thead>
+                <h1> Workers </h1>
+                <tr>
+                    <th>username</th>
+                </tr>
+            </thead>
+            <tbody id="testBody"></tbody>
+        </table>
+        <table id="pilotTable" class="sortable">
+            <h1> Pilots </h1>
+            <thead>
+                <tr>
+                    <th>username</th>
+                    <th>License ID</th>
+                    <th> Experience </th>
+                </tr>
+            </thead>
+            <tbody id="testBody"></tbody>
+        </table>
+    </div>
+>>>>>>> matt_branch
     </div>
     
 </body>

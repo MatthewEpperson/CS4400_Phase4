@@ -23,7 +23,7 @@ const connection = mysql.createConnection({
 
     host: "localhost",
     user: "root",
-    password: "password",
+    password: "asdqwe123",
     database: "restaurant_supply_express"
 
 })
@@ -587,29 +587,18 @@ app.get("/display-locations-view", function(req, res) {
 })
 
 
-<<<<<<< HEAD
-app.post("/display-employee-view", function(req, res) {
-    console.log("in /display-employee-view")
-    userQuery = "select * from display_employee_view where username in (select username from work_for where binary id = binary ?) and manager_status = 'NO' collate utf8mb4_unicode_ci"
-    console.log(JSON.stringify(req.body))
-    connection.query(userQuery, [req.body.serviceId], function(err, rows) {
-=======
 app.get("/display-employee-view", function(req, res) {
     employeeQuery = "select * from display_employee_view"
     workerQuery = "select * from workers"
     pilotQuery = "select * from pilots"
 
+
     let employees;
     connection.query(employeeQuery, function(err, rows) {
->>>>>>> matt_branch
         if (err) {
             console.log(err.message)
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
-<<<<<<< HEAD
-            res.json({success: true, data: rows})
-=======
-            console.log(employeeQuery);
             employees = rows
         }
     })
@@ -632,9 +621,9 @@ app.get("/display-employee-view", function(req, res) {
             console.log(pilotQuery);
             pilots = rows
             res.json({success: true, employees: employees, workers: workers, pilots: pilots})
->>>>>>> matt_branch
         }
     })
+    console.log("asdfjasdf")
 })
 
 app.post("/fire-employee", function(req, res) {

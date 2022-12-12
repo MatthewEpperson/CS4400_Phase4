@@ -6,12 +6,11 @@ function displaySelect() {
     let xhr = new XMLHttpRequest
     xhr.addEventListener("load", displaySelectHandler)
     xhr.responseType="json";
-    xhr.open("POST", "/display-employee-view")
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
-    xhr.send(`serviceId=${user.serviceId}`);
+    xhr.open("GET", "/display-employee-view")
+    xhr.send();
 }
 
-document.getElementById("hireSubmit").addEventListener("click", submitHandler)
+// document.getElementById("hireSubmit").addEventListener("click", submitHandler)
 
 function submitHandler() {
 
@@ -36,6 +35,7 @@ function displaySelectHandler() {
             employeeData = this.response.employees
             workerData = this.response.workers
             pilotData = this.response.pilots
+            console.log(workerData)
             // document.getElementById("select_output").innerText = JSON.stringify(this.response.data)     }
             for (let i = 0; i < employeeData.length; i++) {
                 populateTable(employeeData[i], "employeeTable");
@@ -243,8 +243,9 @@ document.getElementById('clearBtn').onclick = function() {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-    user = getUser()
+    // user = getUser()
     // displaySelect();
+    displaySelect()
 
 });
 

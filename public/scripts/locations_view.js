@@ -7,16 +7,20 @@ function displaySelect() {
 }
 
 let locationsData = null;
+let locations = null;
 
 function displaySelectHandler() {
     if (this.response.success) {
         console.log("SUCCESSSS");
-        if (this.response.data) {
-            let data = this.response.data;
-            locationsData = data;
+        if (this.response.locationViews) {
+            locationsData = this.response.locationViews
+            locations = this.response.locations
             // document.getElementById("select_output").innerText = JSON.stringify(this.response.data)     }
-            for (let i = 0; i < data.length; i++) {
-                populateTable(data[i]);
+            for (let i = 0; i < locationsData.length; i++) {
+                populateTable(locationsData[i], "locationTable");
+            }
+            for (let i = 0; i < locations.length; i++) {
+                populateTable(locations[i], "locationTable2")
             }
         }
     } else {
@@ -34,33 +38,35 @@ function filterTable() {
         for (const location of locationsData) {
             if (name != "" && drones == "") {
                 if (location.label == name) {
-                    clearTable();
-                    populateTable(location);
+                    clearTable("locationTable");
+                    populateTable(location, "locationTable");
                     continue;
                 }
             }
             if (drones != "" && name == "") {
                 if (location.num_drones == drones) {
-                    populateTable(location);
+                    populateTable(location, "locationTable");
                     continue;
                 }
             }
             if (drones != "" && name != "") {
                 if (location.label == name && location.num_drones == drones) {
-                    populateTable(location);
+                    populateTable(location, "locationTable");
                     continue;
                 }
             }
             if (name == "" && drones == "") {
-                populateTable(location);
+                populateTable(location, "locationTable");
             }
         }
     }
     
 }
 
-function clearTable() {
-    const table = document.getElementById("locationTable");
+
+
+function clearTable(tableName) {
+    const table = document.getElementById(tableName);
 
     for (let i = table.rows.length - 1; i > 0; i--) {
         table.deleteRow(i);
@@ -68,8 +74,8 @@ function clearTable() {
 }
 
 
-function populateTable(items) {
-    const table = document.getElementById("locationTable");
+function populateTable(items, tableName) {
+    const table = document.getElementById(tableName);
 
     let itemKeys = Object.keys(items);
     
@@ -93,6 +99,42 @@ function populateTable(items) {
 }
 
 
+document.getElementById("addLocationBtn").onclick = function() {
+    let label = document.getElementById("name")
+    let xCoord = document.getElementById("xCoordInput")
+    let yCoord = document.getElementById("yCoordInput")
+    let space = document.getElementById("spaceInput")
+
+    addLocation(label.value, xCoord.value, yCoord.value, space.value)
+}
+
+
+function addLocation(name, xCoord, yCoord, space) {
+    let information = `label=${name}&xcoord=${xCoord}&ycoord=${yCoord}&space=${space}`
+    console.log(information)
+    addLocationRequest(information)
+}
+
+
+function addLocationRequest(information) {
+    let xml = new XMLHttpRequest
+    xml.responseType = "json"
+    xml.addEventListener("load", addLocationResponse)
+    url = "/attempt-add-location"
+    
+    xml.open("POST", url)
+    xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xml.send(information)
+
+    clearTable("locationTable2")
+    displaySelect()
+}
+
+function addLocationResponse() {
+
+}
+
+
 document.getElementById('name').onchange = function() {
     filterTable();
 };
@@ -104,7 +146,7 @@ document.getElementById('drones').onchange = function() {
 document.getElementById('clearBtn').onclick = function() {
     document.getElementById('name').value = "";
     document.getElementById('drones').value = "";
-    clearTable();
+    clearTable("locationTable");
     filterTable();
 };
 

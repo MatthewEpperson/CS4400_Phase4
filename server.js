@@ -351,6 +351,26 @@ app.post("/attempt-purchase-ingredient", function(req, res) {
 })
 
 
+
+app.post("/attempt-add-location", function(req, res) {
+    let addLocation = 'call add_location(?, ?, ?, ?)'
+    connection.query(addLocation, [
+        req.body.label,
+        req.body.xcoord,
+        req.body.ycoord,
+        req.body.space
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-add-location"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully added location"})
+            console.log("location was added")
+        }
+    })
+})
+
+
 app.post("/attempt-register", function(req, res){
     query = "select * from users where username = ?"
     connection.query(query, [req.body.username], function(err, rows) {
@@ -464,13 +484,26 @@ app.get("/display-owner", function(req, res) {
 
 
 app.get("/display-locations-view", function(req, res) {
-    userQuery = "select * from display_location_view"
-    connection.query(userQuery, function(err, rows) {
+    locationView = "select * from display_location_view"
+    allLocation = "select * from locations"
+
+    let locationViews;
+    connection.query(locationView, function(err, rows) {
         if (err) {
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
-            console.log(userQuery);
-            res.json({success: true, data: rows})
+            console.log(locationView);
+            locationViews = rows
+        }
+    })
+
+    let locations;
+    connection.query(allLocation, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            locations = rows
+            res.json({success: true, locationViews: locationViews, locations: locations})
         }
     })
 })

@@ -281,6 +281,56 @@ app.post("/attempt-remove-ingredient", function(req, res) {
 })
 
 
+app.post("/attempt-add-pilot-role", function(req, res) {
+    let pilotRole = 'call add_pilot_role(?,?,?)'
+    connection.query(pilotRole, [
+        req.body.username,
+        req.body.licenseID,
+        req.body.experience
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-add-pilot-role"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully addd pilot"})
+            console.log("pilot was added")
+        }
+    })
+})
+
+
+app.post("/attempt-add-worker-role", function(req, res) {
+    let workerRole = 'call add_worker_role(?)'
+    connection.query(workerRole, [
+        req.body.username
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-add-worker-role"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully add worker role"})
+            console.log("worker role was added")
+        }
+    })
+})
+
+
+app.post("/attempt-remove-pilot-role", function(req, res) {
+    let pilotRole = 'call remove_pilot_role(?)'
+    connection.query(pilotRole, [
+        req.body.username
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-remove-pilot-role"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully removed pilot"})
+            console.log("pilot was removed")
+        }
+    })
+})
+
+
 app.post("/attempt-purchase-ingredient", function(req, res) {
     let purchaseIngredient = 'call purchase_ingredient(?, ?, ?, ?, ?)'
     connection.query(purchaseIngredient, [
@@ -427,13 +477,38 @@ app.get("/display-locations-view", function(req, res) {
 
 
 app.get("/display-employee-view", function(req, res) {
-    userQuery = "select * from display_employee_view"
-    connection.query(userQuery, function(err, rows) {
+    employeeQuery = "select * from display_employee_view"
+    workerQuery = "select * from workers"
+    pilotQuery = "select * from pilots"
+
+    let employees;
+    connection.query(employeeQuery, function(err, rows) {
         if (err) {
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
-            console.log(userQuery);
-            res.json({success: true, data: rows})
+            console.log(employeeQuery);
+            employees = rows
+        }
+    })
+
+    let workers;
+    connection.query(workerQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(workerQuery);
+            workers = rows
+        }
+    })
+
+    let pilots;
+    connection.query(pilotQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(pilotQuery);
+            pilots = rows
+            res.json({success: true, employees: employees, workers: workers, pilots: pilots})
         }
     })
 })
@@ -486,6 +561,7 @@ app.get("/display-owners-view", function(req, res) {
         }
     })
 })
+
 
 
 app.get("/display-drones", function(req, res) {

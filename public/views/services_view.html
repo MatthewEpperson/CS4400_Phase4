@@ -13,13 +13,17 @@
         <input type="text" id="serviceID">
         <label for="serviceName">&nbsp &nbsp Name:</label>
         <input type="text" id="serviceName">
+        <label for="homebaseInput">&nbsp &nbsp Home Base:</label>
+        <input type="text" id="homebaseInput">
         <label for="serviceManager">&nbsp &nbsp Manager:</label>
         <input type="text" id="serviceManager">
         <button type="button" id="clearBtn">Clear</button>
+        <button type="button" id="addServiceBtn">Add Service</button>
     </div>
     <div id="serviceDiv">
         <table id="serviceTable" class="sortable">
             <thead>
+                <h1> Service View Table</h1>
                 <tr>
                     <th>Service ID</th>
                     <th>Name</th>
@@ -29,6 +33,18 @@
                     <th>Ingredients Carried</th>
                     <th>Cost Carried</th>
                     <th>Weight Carried</th>
+                </tr>
+            </thead>
+            <tbody id="testBody"></tbody>
+        </table>
+        <table id="serviceTable2" class="sortable">
+            <thead>
+                <h1> Delivery Services </h1>
+                <tr>
+                    <th>Service ID</th>
+                    <th>Name</th>
+                    <th>Home Base</th>
+                    <th>Manager</th>
                 </tr>
             </thead>
             <tbody id="testBody"></tbody>

@@ -154,6 +154,26 @@ app.post("/attempt-add-drone", function(req, res) {
 })
 
 
+app.post("/attempt-add-service", function(req, res) {
+    let addService = 'call add_service(?, ?, ?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(addService, [
+        req.body.serviceID,
+        req.body.serviceName,
+        req.body.homeBase,
+        req.body.manager
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-add-service"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully added service"})
+            console.log("Service added!")
+        }
+    })
+})
+
+
 app.post("/attempt-join-swarm", function(req, res) {
     let joinSwarm = 'call join_swarm(?, ?, ?)'
     console.log(JSON.stringify(req.body))
@@ -672,13 +692,26 @@ app.get("/display-pilots-page", function(req, res) {
 
 
 app.get("/display-services-view", function(req, res) {
-    userQuery = "select * from display_service_view"
-    connection.query(userQuery, function(err, rows) {
+    serviceView = "select * from display_service_view"
+    serviceTable = "select * from delivery_services"
+    // res.json({success: true, data: rows})
+
+    let serviceViewTable;
+    connection.query(serviceView, function(err, rows) {
         if (err) {
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
-            console.log(userQuery);
-            res.json({success: true, data: rows})
+            serviceViewTable = rows
+        }
+    })
+
+    let services;
+    connection.query(serviceTable, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            services = rows
+            res.json({success: true, serviceViewData: serviceViewTable, services: services})
         }
     })
 })

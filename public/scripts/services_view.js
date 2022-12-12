@@ -7,16 +7,20 @@ function displaySelect() {
 }
 
 let serviceData = null;
+let serviceTable = null;
 
 function displaySelectHandler() {
     if (this.response.success) {
         console.log("SUCCESSSS");
-        if (this.response.data) {
-            let data = this.response.data;
-            serviceData = data;
+        if (this.response.services) {
+            serviceData = this.response.serviceViewData
+            serviceTable = this.response.services
             // document.getElementById("select_output").innerText = JSON.stringify(this.response.data)     }
-            for (let i = 0; i < data.length; i++) {
-                populateTable(data[i]);
+            for (let i = 0; i < serviceData.length; i++) {
+                populateTable(serviceData[i], "serviceTable");
+            }
+            for (let i = 0; i < serviceTable.length; i++) {
+                populateTable(serviceTable[i], "serviceTable2")
             }
         }
     } else {
@@ -31,28 +35,28 @@ function filterTable() {
     let manager = document.getElementById('serviceManager').value;
     let name = document.getElementById('serviceName').value;
     if (serviceData != null) {
-        clearTable();
+        clearTable("serviceTable");
         for (const service of serviceData) {
             if (serviceID != "" && manager == "" && name == "") {
                 if (service.id == serviceID) {
-                    populateTable(service);
+                    populateTable(service, "serviceTable");
                     continue;
                 }
             }
             if (manager != "" && serviceID == "" && name == "") {
                 if (service.manager == manager) {
-                    populateTable(service);
+                    populateTable(service, "serviceTable");
                     continue;
                 }
             }
             if (name != "" && serviceID == "" && manager == "") {
                 if (service.long_name == name) {
-                    populateTable(service);
+                    populateTable(service, "serviceTable");
                     continue;
                 }
             }
             if (name == "" && serviceID == "" && manager == "") {
-                populateTable(service);
+                populateTable(service, "serviceTable");
             }
         }
     }
@@ -60,8 +64,8 @@ function filterTable() {
 }
 
 
-function clearTable() {
-    const table = document.getElementById("serviceTable");
+function clearTable(tableName) {
+    const table = document.getElementById(tableName);
 
     for (let i = table.rows.length - 1; i > 0; i--) {
         table.deleteRow(i);
@@ -69,9 +73,9 @@ function clearTable() {
 }
 
 
-function populateTable(items) {
+function populateTable(items, tableName) {
     console.log(items);
-    const table = document.getElementById("serviceTable");
+    const table = document.getElementById(tableName);
 
     let itemKeys = Object.keys(items);
     
@@ -111,12 +115,45 @@ document.getElementById('clearBtn').onclick = function() {
     document.getElementById('serviceManager').value = "";
     document.getElementById('serviceID').value = "";
     document.getElementById('serviceName').value = "";
-    clearTable();
+    clearTable("serviceTable");
     filterTable();
 };
 
 document.addEventListener("DOMContentLoaded", function() {
     displaySelect();
   });
+
+
+document.getElementById("addServiceBtn").onclick = function() {
+    let serviceID = document.getElementById("serviceID")
+    let serviceName = document.getElementById("serviceName")
+    let homeBase = document.getElementById("homebaseInput")
+    let manager = document.getElementById("serviceManager")
+
+    addService(serviceID.value, serviceName.value, homeBase.value, manager.value)
+}
+
+
+function addService(serviceID, serviceName, homeBase, manager) {
+    let information = `serviceID=${serviceID}&serviceName=${serviceName}&homeBase=${homeBase}&manager=${manager}`
+    addServiceRequest(information)
+}
+
+function addServiceRequest(information) {
+    let xml = new XMLHttpRequest
+    xml.responseType = "json"
+    xml.addEventListener("load", addServiceResponse)
+    url = "/attempt-add-service"
+    
+    xml.open("POST", url)
+    xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xml.send(information)
+    clearTable("serviceTable2")
+    displaySelect()
+}
+
+function addServiceResponse() {
+
+}
 
 document.getElementById("query_input").addEventListener("click", displaySelect);

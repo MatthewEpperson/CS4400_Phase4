@@ -13,11 +13,21 @@
         <input type="text" id="name">
         <label for="taxID">&nbsp &nbsp Number of Drones:</label>
         <input type="text" id="drones">
+        <label for="xCoordInput">&nbsp &nbsp X_Coord:</label>
+        <input type="text" id="xCoordInput">
+        <label for="yCoordInput">&nbsp &nbsp Y_Coord:</label>
+        <input type="text" id="yCoordInput">
+        <br>
+        <br>
+        <label for="spaceInput">&nbsp &nbsp Space:</label>
+        <input type="text" id="spaceInput">
         <button type="button" id="clearBtn">Clear</button>
+        <button type="button" id="addLocationBtn">Add Location</button>
     </div>
     <div id="locationDiv">
         <table id="locationTable" class="sortable">
             <thead>
+                <h1>Locations View</h1>
                 <tr>
                     <th>Name</th>
                     <th>X Coord</th>
@@ -25,6 +35,18 @@
                     <th>Num Restaurants</th>
                     <th>Num Delivery Services</th>
                     <th>Num Drones</th>
+                </tr>
+            </thead>
+            <tbody id="testBody"></tbody>
+        </table>
+        <table id="locationTable2" class="sortable">
+            <thead>
+                <h1>All Locations</h1>
+                <tr>
+                    <th>Label</th>
+                    <th>X Coord</th>
+                    <th>Y Coord</th>
+                    <th>Space</th>
                 </tr>
             </thead>
             <tbody id="testBody"></tbody>

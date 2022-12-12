@@ -163,6 +163,26 @@ app.post("/attempt-add-drone", function(req, res) {
 })
 
 
+app.post("/attempt-add-service", function(req, res) {
+    let addService = 'call add_service(?, ?, ?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(addService, [
+        req.body.serviceID,
+        req.body.serviceName,
+        req.body.homeBase,
+        req.body.manager
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-add-service"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully added service"})
+            console.log("Service added!")
+        }
+    })
+})
+
+
 app.post("/attempt-join-swarm", function(req, res) {
     let joinSwarm = 'call join_swarm(?, ?, ?)'
     console.log(JSON.stringify(req.body))
@@ -407,6 +427,26 @@ app.post("/attempt-add-pilot-role", function(req, res) {
 })
 
 
+app.post("/attempt-add-owner", function(req, res) {
+    let addOwner = 'call add_owner(?,?,?,?,?)'
+    connection.query(addOwner, [
+        req.body.username,
+        req.body.fName,
+        req.body.lName,
+        req.body.address,
+        req.body.birthdate
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-add-owner"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully added owner"})
+            console.log("owner was added")
+        }
+    })
+})
+
+
 app.post("/attempt-add-worker-role", function(req, res) {
     let workerRole = 'call add_worker_role(?)'
     connection.query(workerRole, [
@@ -454,6 +494,26 @@ app.post("/attempt-purchase-ingredient", function(req, res) {
         } else {
             res.json({success: true, message: "successfully purchased ingredient"})
             console.log("ingredient was purchased")
+        }
+    })
+})
+
+
+
+app.post("/attempt-add-location", function(req, res) {
+    let addLocation = 'call add_location(?, ?, ?, ?)'
+    connection.query(addLocation, [
+        req.body.label,
+        req.body.xcoord,
+        req.body.ycoord,
+        req.body.space
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-add-location"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully added location"})
+            console.log("location was added")
         }
     })
 })
@@ -574,14 +634,27 @@ app.get("/display-owner", function(req, res) {
 
 
 app.get("/display-locations-view", function(req, res) {
-    userQuery = "select * from display_location_view"
-    connection.query(userQuery, function(err, rows) {
+    locationView = "select * from display_location_view"
+    allLocation = "select * from locations"
+
+    let locationViews;
+    connection.query(locationView, function(err, rows) {
         if (err) {
             console.log(err.message)
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
-            console.log(userQuery);
-            res.json({success: true, data: rows})
+            console.log(locationView);
+            locationViews = rows
+        }
+    })
+
+    let locations;
+    connection.query(allLocation, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            locations = rows
+            res.json({success: true, locationViews: locationViews, locations: locations})
         }
     })
 })
@@ -708,13 +781,38 @@ app.get("/display-restaurants", function(req, res) {
 
 
 app.get("/display-owners-view", function(req, res) {
-    userQuery = "select * from display_owner_view"
+    ownerView = "select * from display_owner_view"
+    userQuery = "select * from users"
+    restaurantQuery = "select * from restaurant_owners"
+
+    let ownerViewTable;
+    connection.query(ownerView, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(ownerView);
+            ownerViewTable = rows
+        }
+    })
+
+    let users;
     connection.query(userQuery, function(err, rows) {
         if (err) {
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
             console.log(userQuery);
-            res.json({success: true, data: rows})
+            users = rows
+        }
+    })
+
+    let restaurantOwners;
+    connection.query(restaurantQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(restaurantQuery);
+            restaurantOwners = rows
+            res.json({success: true, ownerViewTable: ownerViewTable, users: users, restaurantOwners: restaurantOwners})
         }
     })
 })
@@ -796,14 +894,27 @@ app.get("/display-pilots-page", function(req, res) {
 
 
 app.get("/display-services-view", function(req, res) {
-    userQuery = "select * from display_service_view"
-    connection.query(userQuery, function(err, rows) {
+    serviceView = "select * from display_service_view"
+    serviceTable = "select * from delivery_services"
+    // res.json({success: true, data: rows})
+
+    let serviceViewTable;
+    connection.query(serviceView, function(err, rows) {
         if (err) {
             console.log(err.message)
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
-            console.log(userQuery);
-            res.json({success: true, data: rows})
+            serviceViewTable = rows
+        }
+    })
+
+    let services;
+    connection.query(serviceTable, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            services = rows
+            res.json({success: true, serviceViewData: serviceViewTable, services: services})
         }
     })
 })

@@ -1,7 +1,3 @@
-let currUser;
-let authenticated = false;
-
-
 document.addEventListener("DOMContentLoaded", (event) => {
     let xhr = new XMLHttpRequest
     xhr.addEventListener("load", authenticator)
@@ -22,23 +18,6 @@ document.getElementById("log-out-button").addEventListener("click", function(eve
     currUser = "Should not see";
     check();
 })
-
-function serverCheck() {
-    if (this.response.success) {
-        console.log("good response from update-authenticated");
-    } else {
-        console.log("bad response from update-authenticated");
-    }
-}
-
-function authenticator() {
-    if (this.response.success) {
-        authenticated = true;
-        currUser = this.response.user.username;
-    } else {
-        authenticated = false;    }
-    check();
-}
 
 let select_input = document.getElementById("type_input")
 select_input.onchange = selectHandler

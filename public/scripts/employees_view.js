@@ -1,7 +1,3 @@
-var authenticated = false;
-var user;
-
-
 function displaySelect() {
     let xhr = new XMLHttpRequest
     xhr.addEventListener("load", displaySelectHandler)
@@ -292,42 +288,47 @@ function hireHandler() {
     displaySelect()
 }
 
-function getUser() {
+// adding add_employe() functionality
 
-    let xml = new XMLHttpRequest
-    xml.responseType = "json"
-    xml.addEventListener("load", getUserHandler)
-    let url = '/get-user'
-    xml.open("GET", url)
-    xml.send()
+document.getElementById("add_employee_submit").addEventListener("click", register)
 
-}
 
-function getUserHandler() {
-
-    if (this.response.success) {
-        console.log(JSON.stringify(this.response))
-        user = this.response.user
-        check()
-        displaySelect();
-    } else {
-        console.log(this.response.message)
-        check()
-    }
+function getQuery() {
+    let result = ""
+    result += `username=${username.value}&`
+    result += `fname=${document.getElementById("first_name_input").value}&`
+    result += `lname=${document.getElementById("last_name_input").value}&`
+    result += `address=${document.getElementById("address_input").value}&`
+    result += `bdate=${document.getElementById("date_input").value}&`
+    result += `hdate=${document.getElementById("hire_date_input").value}&`
+    result += `salary=${document.getElementById("salary_input").value}&`
+    result += `experience=${document.getElementById("experience_input").value}&`
+    result += `taxID=${document.getElementById("tax_input").value}`
+    return result
 
 }
 
-function check() {
-    console.log(JSON.stringify(user))
-    console.log(user.type)
-    if (user.type) {
-        if (user.type == 1) {
-            document.getElementById("allow").removeAttribute("hidden")
-            document.getElementById("deny").setAttribute("hidden", true)
-        }
+let username = document.getElementById("username_input")
 
-    } else {
-        document.getElementById("deny").removeAttribute("hidden")
-        document.getElementById("body").setAttribute("hidden", true)
-    }
+
+function register(event){
+    console.log("Register button clicked....");
+    event.preventDefault()
+    let xhr = new XMLHttpRequest
+    xhr.addEventListener("load", responseHandler)
+    query=getQuery()
+    console.log(`Query: ${query}`);
+    url = `/add-employee`
+    xhr.responseType = "json";   
+    xhr.open("POST", url)
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    console.log("POST request to server....");
+    xhr.send(query)
+}
+
+function responseHandler(){
+    console.log("POST response from server....");
+    clearTable("employeeTable")
+    displaySelect()
+    
 }

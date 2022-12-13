@@ -23,7 +23,7 @@ const connection = mysql.createConnection({
 
     host: "localhost",
     user: "root",
-    password: "Olaolu5796",
+    password: "password",
     database: "restaurant_supply_express"
 
 })
@@ -573,6 +573,45 @@ app.post("/attempt-register", function(req, res){
                 } else {
                     res.json({success: false, message: `Type invalid`})
                 }
+            }
+        }
+    })    
+})
+
+app.post("/add-employee", function(req, res){
+    query = "select * from users where username = ?"
+    connection.query(query, [req.body.username], function(err, rows) {
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt_register"})
+            console.log(`database error for ${req.body.username}`)
+        } else {
+            if (rows.length == 1) {
+                res.json({success: false, message: "username already taken"})
+                console.log(`username already taken error for ${req.body.username}`)
+
+            } else if (rows.length == 0) {
+                // TODO implement the registration page form
+                
+                insertUser = 'call add_employee(?, ?, ?, ?, ?, ?, ?, ?, ?);'
+                connection.query(insertUser, [
+                    req.body.username,
+                    req.body.fname,
+                    req.body.lname,
+                    req.body.address,
+                    req.body.bdate,
+                    req.body.taxID,
+                    req.body.hdate,
+                    req.body.experience,
+                    req.body.salary
+                    ], function(err, rows) {
+                        if (err) {
+                            console.log(err.message)
+                            res.json({success: false, message: "database insert failed for /attempt_register (employee)"})
+                        } else {
+                            res.json({success: true, message: "successfully added employee"})
+                        }
+                    })
+
             }
         }
     })    

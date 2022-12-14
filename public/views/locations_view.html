@@ -15,8 +15,8 @@
         <a href="pilots_view">Pilots View</a>
         <a href="services_view">Services View</a>
     </div>
-    <div id="container">
-        <h1 id = "title">Locations</h1>
+    <div id="container2">
+        <h1 id = "title1">Locations</h1>
         <label for="username">Name:</label>
         <input type="text" id="name">
         <label for="taxID">&nbsp &nbsp Number of Drones:</label>
@@ -25,13 +25,28 @@
         <input type="text" id="xCoordInput">
         <label for="yCoordInput">&nbsp &nbsp Y_Coord:</label>
         <input type="text" id="yCoordInput">
-        <br>
-        <br>
         <label for="spaceInput">&nbsp &nbsp Space:</label>
         <input type="text" id="spaceInput">
         <button type="button" id="clearBtn">Clear</button>
         <button type="button" id="addLocationBtn">Add Location</button>
     </div>
+
+    <div id="AddHeader">
+        <h1 id = "title">Add Restaurant</h1>
+    </div>
+
+    <div id="addedText">
+        <label for="restName">Name</label>
+        <input type="text" id="restName"  placeholder="Restaurant Name">
+        <label for="rating">Rating</label>
+        <input type="text" id="rating"  placeholder="1 - 5 rating">
+        <label for="spent">Spent</label>
+        <input type="text" id="spent"  placeholder="spent">
+        <label for="location">Location</label>
+        <input type="text" id="location"  placeholder="location">
+        <button type="button" id="addRestBtn">Add Restaurant</button>
+    </div>
+
     <div id="locationDiv">
         <table id="locationTable" class="sortable">
             <thead>

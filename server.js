@@ -518,6 +518,24 @@ app.post("/attempt-add-location", function(req, res) {
     })
 })
 
+app.post("/attempt-add-restaurant", function(req, res) {
+    let addRestaurant = 'call add_restaurant(?, ?, ?, ?)'
+    connection.query(addRestaurant, [
+        req.body.rName,
+        req.body.inRating,
+        req.body.inSpent,
+        req.body.inLocation
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-add-restaurant"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully added location"})
+            console.log("location was added")
+        }
+    })
+})
+
 
 app.post("/attempt-register", function(req, res){
     query = "select * from users where username = ?"

@@ -181,3 +181,36 @@ function addOwnerResponse() {
 }
 
 // document.getElementById("query_input").addEventListener("click", displaySelect);
+// adding start_funding() functionality
+
+document.getElementById("fundBtn").onclick = function() {
+    let usernameOwner = document.getElementById("usernameOwner")
+    let rName = document.getElementById("restName")
+
+    addOwner(usernameOwner.value, rName.value)
+}
+
+function fundRestaurant(usernameOwner, rName) {
+    let information = `usernameOwner=${usernameOwner}&rName=${rName}`
+
+    fundRequest(information)
+}
+
+function fundRequest(information) {
+    let xml = new XMLHttpRequest
+    xml.responseType = "json"
+    xml.addEventListener("load", fundResponse)
+    url = "/attempt-fund-restaurant"
+    
+    xml.open("POST", url)
+    xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xml.send(information)
+    clearTable("ownerTable")
+    clearTable("ownerTable2")
+    clearTable("userTable")
+    displaySelect()
+}
+
+function fundResponse() {
+    
+}

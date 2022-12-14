@@ -15,8 +15,27 @@
         <a href="pilots_view">Pilots View</a>
         <a href="services_view">Services View</a>
     </div>
+    <!-- <div id="">
+        <h3>add_owner()</h3>
+        <div>
+            <label id="username_label" for="username">Username</label>
+            <input type="text" name="username_input" id="username">
+            <label id="first_name_label" for="firstName">First name</label>
+            <input type="text" name="first_name_input" id="firstName">
+            <label id="last_name_label" for="lastName">Last name</label>
+            <input type="text" name="last_name_input" id="lastName">
+        </div>
+        <div>
+            <label id="address_label" for="inputAddress">Address</label>
+            <input type="text" name="address_input" id="inputAddress">
+            <label id="date_label" for="inputBirthdate">Birth date</label>
+            <input type="date" name='date_input' id="inputBirthdate">
+        </div>
+        <button type="button" id="addOwnerBtn">call add_owner()</button>
+    </div> -->
+
     <div id="container">
-        <h1 id = "title">Owners</h1>
+        <h3 id = "title">Add Owner</h3>
         <label for="username">Username:</label>
         <input type="text" id="username">
         <label for="firstName">&nbsp &nbsp First Name:</label>
@@ -31,6 +50,17 @@
         <button type="button" id="clearBtn">Clear</button>
         <button type="button" id="addOwnerBtn">Add Owner</button>
     </div>
+
+    <div id="container">
+        <h3 id = "title">Start Funding</h3>
+        <label for="usernameOwner">Username:</label>
+        <input type="text" id="usernameOwner">
+        <label for="restName">&nbsp &nbsp Restaurant Name:</label>
+        <input type="text" id="restName">
+        <button type="button" id="clearfundBtn">Clear</button>
+        <button type="button" id="fundBtn">Start Funding</button>
+    </div>
+
     <div id="ownerDiv">
         <table id="ownerTable" class="sortable">
             <thead>

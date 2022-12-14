@@ -6,15 +6,15 @@ function displaySelect() {
     xhr.send();
 }
 
-// document.getElementById("hireSubmit").addEventListener("click", submitHandler)
+document.getElementById("hireSubmit").addEventListener("click", submitHandler)
 
 function submitHandler() {
 
-    let prospective_element = document.getElementById("hireUsernameText")
+    let prospective_element = document.getElementById("username_hire")
     let prospective = prospective_element.value
     if (prospective == 0) {
     } else {
-        hireEmployee(prospective)
+        hireEmployee()
         prospective_element.value = ""
     }
 
@@ -52,38 +52,38 @@ function displaySelectHandler() {
 }
 
 
-function filterTable() {
-    let username = document.getElementById('username').value;
-    let taxID = document.getElementById('taxID').value;
-    if (employeeData != null) {
-        for (const employee of employeeData) {
-            console.log(employee);
-            if (username != "" && taxID == "") {
-                if (employee.username == username) {
-                    clearTable("employeeTable");
-                    populateTable(employee);
-                    break;
-                }
-            }
-            if (taxID != "" && username == "") {
-                if (employee.taxID == taxID) {
-                    clearTable("employeeTable");
-                    populateTable(employee);
-                    break;
-                }
-            }
-            if (taxID != "" && username != "") {
-                if (employee.taxID == taxID && employee.username == username) {
-                    clearTable("employeeTable");
-                    populateTable(employee);
-                    break;
-                }
-            }
-            populateTable(employee);
-        }
-    }
+// function filterTable() {
+//     let username = document.getElementById('username').value;
+//     let taxID = document.getElementById('taxID').value;
+//     if (employeeData != null) {
+//         for (const employee of employeeData) {
+//             console.log(employee);
+//             if (username != "" && taxID == "") {
+//                 if (employee.username == username) {
+//                     clearTable("employeeTable");
+//                     populateTable(employee);
+//                     break;
+//                 }
+//             }
+//             if (taxID != "" && username == "") {
+//                 if (employee.taxID == taxID) {
+//                     clearTable("employeeTable");
+//                     populateTable(employee);
+//                     break;
+//                 }
+//             }
+//             if (taxID != "" && username != "") {
+//                 if (employee.taxID == taxID && employee.username == username) {
+//                     clearTable("employeeTable");
+//                     populateTable(employee);
+//                     break;
+//                 }
+//             }
+//             populateTable(employee);
+//         }
+//     }
     
-}
+// }
 
 
 function clearTable(tableName) {
@@ -122,13 +122,14 @@ function populateTable(items, tableName) {
 }
 
 document.getElementById("addPilotRole").onclick = function() {
-    let username = document.getElementById("username")
+    let username = document.getElementById("username_add_pilot")
     let licenseID = document.getElementById("inputLicenseID")
     let experience = document.getElementById("inputExperience")
 
     addPilotRole(username.value, licenseID.value, experience.value)
     clearTable("pilotTable")
     clearTable("workerTable")
+    clearTable("employeeTable")
     displaySelect()
 }
 
@@ -152,8 +153,12 @@ function addPilotRoleRequest(information) {
 
 
 function addPilotRoleResponse() {
+    clearTable("pilotTable")
+    clearTable("workerTable")
+    clearTable("employeeTable")
+    displaySelect()
 
-}
+}   
 
 
 function removePilotRole(username) {
@@ -173,25 +178,30 @@ function removePilotRoleRequest(information) {
 }
 
 function removePilotRoleResponse() {
-
-}
-
-
-document.getElementById("removePilotRole").onclick = function() {
-    let username = document.getElementById("username")
-
-    removePilotRole(username.value)
+    clearTable("employeeTable")
     clearTable("pilotTable")
     clearTable("workerTable")
     displaySelect()
 }
 
 
+document.getElementById("removePilotRole").onclick = function() {
+    let username = document.getElementById("username_remove_pilot")
+
+    removePilotRole(username.value)
+    clearTable("pilotTable")
+    clearTable("employeeTable")
+    clearTable("workerTable")
+    displaySelect()
+}
+
+
 document.getElementById("addWorkerRole").onclick = function() {
-    let username = document.getElementById("username")
+    let username = document.getElementById("username_add_worker")
 
     addWorkerRole(username.value)
     clearTable("workerTable")
+    clearTable("employeeTable")
     clearTable("pilotTable")
     displaySelect()
 }
@@ -218,25 +228,13 @@ function addWorkerRoleResponse(information) {
 }
 
 
-document.getElementById('username').onchange = function() {
-    filterTable();
-};
+// document.getElementById('username').onchange = function() {
+//     filterTable();
+// };
 
-document.getElementById('taxID').onchange = function() {
-    filterTable();
-};
-
-document.getElementById('clearBtn').onclick = function() {
-    document.getElementById('username').value = "";
-    document.getElementById('taxID').value = "";
-    document.getElementById('inputLicenseID').value = "";
-    document.getElementById('inputExperience').value = "";
-    clearTable("employeeTable");
-    clearTable("workerTable")
-    clearTable("pilotTable")
-    displaySelect()
-    filterTable();
-};
+// document.getElementById('taxID').onchange = function() {
+//     filterTable();
+// };
 
 document.addEventListener("DOMContentLoaded", function() {
     // user = getUser()
@@ -245,28 +243,44 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
-function fireEmployee(username) {
-    console.log(username)
-    // id = user.id
-    let id = "rr"
+document.getElementById("fireSubmit").addEventListener("click", fireEmployee) 
+
+function fireEmployee() {
+    let username = document.getElementById("username_fire").value
+    let id = document.getElementById("serviceID_fire").value
+    
+    if (username.length == 0 || id.length == 0) {
+        return
+    }
+
     let xhr = new XMLHttpRequest
     xhr.addEventListener("load", fireHandler)
     xhr.responseType= "json";
     url = "/fire-employee"
     xhr.open("POST", url)
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
-    xhr.send(`serviceId=${user.serviceId}`);
+    xhr.send(`username=${username}&id=${id}`);
 }
 
 function fireHandler() {
-    clearTable("employeeTable")
+    clearTable("employeeTable");
+    clearTable("workerTable")
+    clearTable("pilotTable")
+
     displaySelect()
 }
 
-function hireEmployee(username) {
+function hireEmployee() {
     // id = user.id
     console.log("HIRING EMPLOYEE")
-    let id = "rr"
+    let username = document.getElementById("username_hire").value
+    let id = document.getElementById("serviceID_hire").value
+    
+    if (username.length == 0 || id.length == 0) {
+        console.log(`invalid username or serviceID`)
+        return
+    }
+
     let xhr = new XMLHttpRequest
     xhr.addEventListener("load", hireHandler)
     xhr.responseType= "json";
@@ -278,14 +292,18 @@ function hireEmployee(username) {
 
 function hireHandler() {
 
-    if (this.response.message) {
-        let message = this.response.message
-        document.getElementById("message").value = message
+    if (this.response.success) {
+        console.log(this.response.message)
+        clearTable("employeeTable");
+        clearTable("workerTable")
+        clearTable("pilotTable")
+    
+        displaySelect()
+    } else if (this.response.success == false) {
+        console.log(this.response.message)
     }
 
 
-    clearTable("employeeTable")
-    displaySelect()
 }
 
 // adding add_employe() functionality
@@ -332,3 +350,76 @@ function responseHandler(){
     displaySelect()
     
 }
+
+document.getElementById('clearBtn1').onclick = function() {
+    const inputs = document.querySelectorAll('.inp1')
+    inputs.forEach(input => {
+        input.value = ''
+    })
+
+    clearTable("employeeTable");
+    clearTable("workerTable")
+    clearTable("pilotTable")
+    displaySelect()
+    filterTable();
+};
+document.getElementById('clearBtn2').onclick = function() {
+    const inputs = document.querySelectorAll('.inp2')
+    inputs.forEach(input => {
+        input.value = ''
+    })
+
+    clearTable("employeeTable");
+    clearTable("workerTable")
+    clearTable("pilotTable")
+    displaySelect()
+    filterTable();
+};
+document.getElementById('clearBtn3').onclick = function() {
+    const inputs = document.querySelectorAll('.inp3')
+    inputs.forEach(input => {
+        input.value = ''
+    })
+
+    clearTable("employeeTable");
+    clearTable("workerTable")
+    clearTable("pilotTable")
+    displaySelect()
+    filterTable();
+};
+document.getElementById('clearBtn4').onclick = function() {
+    const inputs = document.querySelectorAll('.inp4')
+    inputs.forEach(input => {
+        input.value = ''
+    })
+
+    clearTable("employeeTable");
+    clearTable("workerTable")
+    clearTable("pilotTable")
+    displaySelect()
+    filterTable();
+};
+document.getElementById('clearBtn5').onclick = function() {
+    const inputs = document.querySelectorAll('.inp5')
+    inputs.forEach(input => {
+        input.value = ''
+    })
+
+    clearTable("employeeTable");
+    clearTable("workerTable")
+    clearTable("pilotTable")
+    displaySelect()
+    filterTable();
+};
+document.getElementById('clearBtn6').onclick = function() {
+    const inputs = document.querySelectorAll('.inp6')
+    inputs.forEach(input => {
+        input.value = ''
+    })
+
+    clearTable("employeeTable");
+    clearTable("workerTable")
+    clearTable("pilotTable")
+    displaySelect()
+    filterTable();
+};

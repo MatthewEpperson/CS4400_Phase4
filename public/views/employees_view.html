@@ -16,53 +16,117 @@
         <a href="pilots_view">Pilots View</a>
         <a href="services_view">Services View</a>
     </div>
-    <div id="container">
-        <h1 id = "title">Employees</h1>
-        <label for="username">Username:</label>
-        <input type="text" id="username">
-        <label for="taxID">&nbsp Tax ID:</label>
-        <input type="text" id="taxID">
-        <label for="inputLicenseID">&nbsp License ID:</label>
-        <input type="text" id="inputLicenseID">
-        <label for="inputExperience">&nbsp Experience:</label>
-        <input type="text" id="inputExperience">
-        <button type="button" id="clearBtn">Clear</button>
-        <button type="button" id="addPilotRole"> Add Pilot Role </button>
-        <button type="button" id="removePilotRole"> Remove Pilot Role </button>
-        <button type="button" id="addWorkerRole"> Add Worker Role </button>
-    </div>
     <div id="add_employee">
         <h3>add_employee()</h3>
         <div>
             <label id="username_label" for="username_input">Username</label>
-            <input type="text" name="username_input" id="username_input">
+            <input type="text" class="inp1" name="username_input" id="username_input">
             <label id="first_name_label" for="first_name_input">First name</label>
-            <input type="text" name="first_name_input" id="first_name_input">
+            <input type="text" class="inp1" name="first_name_input" id="first_name_input">
             <label id="last_name_label" for="last_name_input">Last name</label>
-            <input type="text" name="last_name_input" id="last_name_input">
+            <input type="text" class="inp1" name="last_name_input" id="last_name_input">
 
             <label id="salary_label" for="salary_input">Salary</label>
-            <input type="number" name="salary_input" id="salary_input">
+            <input type="number" class="inp1" name="salary_input" id="salary_input">
 
         </div>
         <div>
             <label id="address_label" for="address_input">Address</label>
-            <input type="text" name="address_input" id="address_input">
+            <input type="text" class="inp1" name="address_input" id="address_input">
             <label id="date_label" for="date_input">Birth date</label>
-            <input type="date" name='date_input' id="date_input">
+            <input type="date" class="inp1" name='date_input' id="date_input">
 
             <label id="hire_label" for="hire_date_input">Hire date</label>
-            <input type="date" name='hire_date_input' id="hire_date_input">
+            <input type="date" class="inp1" name='hire_date_input' id="hire_date_input">
 
             <label id="experience_label" for="experience_input">Years of experience</label>
-            <input type="number" id="experience_input" name="experience_input">
+            <input type="number" class="inp1" id="experience_input" name="experience_input">
             <label id="tax_label" for="tax_input">SSN</label>
-            <input type="password" name="tax_input" id="tax_input" placeholder="123-45-6789">
+            <input type="password" class="inp1" name="tax_input" id="tax_input" placeholder="123-45-6789">
         </div>
-        <input type="submit" id="add_employee_submit" value="call add_employee()">
+        <div>
+            <br>
+            <input type="submit" id="add_employee_submit">
+            <button type="button" id="clearBtn1">Clear</button>
+        </div>
     </div>
+    <div id="add-worker-role">
+        <h3>add_worker_role()</h3>
+        <div>
+            <label for="username_add_worker">Username:</label>
+            <input type="text" class="inp2" id="username_add_worker" name="username_add_worker">
+        </div>
+        <div>
+            <br>
+            <input type="submit" id="addWorkerRole">
+            <button type="button" id="clearBtn2">Clear</button>
+        </div>
+    </div>
+
+    <div id="add-pilot-role">
+        <h3>add_pilot_role()</h3>
+        <div>
+            <label for="username_add_pilot">Username:</label>
+            <input type="text" class="inp3" id="username_add_pilot" name="username_add_pilot">
+            <label for="inputLicenseID">&nbsp License ID:</label>
+            <input type="number" class="inp3" id="inputLicenseID">
+            <label for="inputExperience">&nbsp Experience:</label>
+            <input type="number" class="inp3" id="inputExperience">
+        </div>
+        <div>
+            <br>
+            <input type="submit" id="addPilotRole">
+            <button type="button" id="clearBtn3">Clear</button>
+        </div>
+    </div>
+
+    <div id="remove-pilot-role">
+        <h3>remove_pilot_role()</h3>
+        <div>
+            <label for="username_remove_pilot">Username:</label>
+            <input type="text" class="inp4" id="username_remove_pilot" name="username_remove_pilot">
+        </div>
+        <div>
+            <br>
+            <input type="submit" id="removePilotRole">
+            <button type="button" id="clearBtn4">Clear</button>
+        </div>
+    </div>
+
+    <div id="hire-employee">
+        <h3>hire_employee()</h3>
+        <div>
+            <label for="username_hire">Username:</label>
+            <input type="text" class="inp5" id="username_hire">
+            <label for="serviceID_hire">Service ID:</label>
+            <input type="text" class="inp5" id="serviceID_hire" name="serviceID_hire">
+        </div>
+        <div>
+            <br>
+            <input type="submit" id="hireSubmit">
+            <button type="button" id="clearBtn5">Clear</button>
+        </div>
+    </div>
+
+    <div id="fire-employee">
+        <h3>fire_employee()</h3>
+        <div>
+            <label for="username_fire">Username:</label>
+            <input type="text" class="inp6" id="username_fire" name="username_fire">
+            <label for="serviceID_fire">Service ID:</label>
+            <input type="text" class="inp6" id="serviceID_fire" name="serviceID_fire">
+        </div>
+        <div>
+            <br>
+            <input type="submit" id="fireSubmit">
+            <button type="button" id="clearBtn6">Clear</button>
+
+        </div>
+    </div>
+
     <br>
     <div id="employeeDiv">
+        <h1>Employees</h1>
         <table id="employeeTable" class="sortable">
             <thead>
                 <tr>
@@ -80,26 +144,32 @@
         </table>
     </div>
     <div id="workerDiv">
-        <table id="workerTable" class="sortable">
-            <thead>
-                <h1> Workers </h1>
-                <tr>
-                    <th>username</th>
-                </tr>
-            </thead>
-            <tbody id="testBody"></tbody>
-        </table>
-        <table id="pilotTable" class="sortable">
-            <h1> Pilots </h1>
-            <thead>
-                <tr>
-                    <th>username</th>
-                    <th>License ID</th>
-                    <th> Experience </th>
-                </tr>
-            </thead>
-            <tbody id="testBody"></tbody>
-        </table>
+        <div class="table-align" id="workerTableSpecific">
+
+            <table id="workerTable" class="sortable">
+                <thead>
+                    <h1> Workers </h1>
+                    <tr>
+                        <th>username</th>
+                    </tr>
+                </thead>
+                <tbody id="testBody"></tbody>
+            </table>
+        </div>
+        <div class="table-align">
+
+            <table id="pilotTable" id="pilotTableSpecific" class="sortable">
+                <h1> Pilots </h1>
+                <thead>
+                    <tr>
+                        <th>username</th>
+                        <th>License ID</th>
+                        <th> Experience </th>
+                    </tr>
+                </thead>
+                <tbody id="testBody"></tbody>
+            </table>
+        </div>
     </div>
     </div>
     

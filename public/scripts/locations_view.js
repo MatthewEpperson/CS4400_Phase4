@@ -154,4 +154,42 @@ document.addEventListener("DOMContentLoaded", function() {
     displaySelect();
   });
 
-document.getElementById("query_input").addEventListener("click", displaySelect);
+//document.getElementById("query_input").addEventListener("click", displaySelect);
+
+
+///add_restaurant
+
+document.getElementById("addRestBtn").onclick = function() {
+    let restNameIn = document.getElementById("restName")
+    let ratingIn = document.getElementById("rating")
+    let spentIn = document.getElementById("spent")
+    let locationIn = document.getElementById("location")
+
+    addLocation(restNameIn.value, ratingIn.value, spentIn.value, locationIn.value)
+}
+
+
+function addLocation(restNameIn, ratingIn, spentIn, locationIn) {
+    let information = `rName=${restNameIn}&inRating=${ratingIn}&inSpent=${spentIn}&inLocation=${locationIn}`
+    addRestaurantRequest(information)
+}
+
+
+function addRestaurantRequest(information) {
+    let xml = new XMLHttpRequest
+    xml.responseType = "json"
+    xml.addEventListener("load", addRestaurantResponse)
+    url = "/attempt-add-restaurant"
+    
+    xml.open("POST", url)
+    xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xml.send(information)
+
+    clearTable("locationTable")
+    clearTable("locationTable2")
+    displaySelect()
+}
+
+function addRestaurantResponse() {
+
+}

@@ -23,7 +23,7 @@ const connection = mysql.createConnection({
 
     host: "localhost",
     user: "root",
-    password: "Olaolu5796",
+    password: "asdqwe123",
     database: "restaurant_supply_express"
 
 })
@@ -907,13 +907,28 @@ app.get("/display-drones", function(req, res) {
 })
 
 app.get("/display-pilots-view", function(req, res) {
-    userQuery = "select * from display_pilot_view"
-    connection.query(userQuery, function(err, rows) {
+    pilotQuery = "select * from display_pilot_view"
+    droneQuery = "select * from drones"
+
+
+    let pilots;
+    connection.query(pilotQuery, function(err, rows) {
         if (err) {
             res.json({success: false, message:"database query failed for /display-select"})
         } else {
-            console.log(userQuery);
-            res.json({success: true, data: rows})
+            console.log(pilotQuery);
+            pilots = rows
+        }
+    })
+
+    let drones;
+    connection.query(droneQuery, function(err, rows) {
+        if (err) {
+            res.json({success: false, message:"database query failed for /display-select"})
+        } else {
+            console.log(droneQuery);
+            drones = rows
+            res.json({success: true, pilots: pilots, drones: drones})
         }
     })
 })

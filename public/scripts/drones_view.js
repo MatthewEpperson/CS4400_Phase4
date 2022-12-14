@@ -87,6 +87,7 @@ function addDrone(droneID, droneTag, droneFuel, droneCapacity, droneSales, drone
     }
     let information = `droneID=${droneID}&droneTag=${droneTag}&droneFuel=${droneFuel}&droneCapacity=${droneCapacity}` +
                         `&droneSales=${droneSales}&droneFlownBy=${droneFlownBy}`
+    console.log(information)
     addDroneRequest(information)
     clearTable("droneTable")
     displaySelect()
@@ -152,5 +153,6 @@ document.getElementById("addDroneBtn").onclick = function() {
 
 
 document.addEventListener("DOMContentLoaded", function() {
+    console.log("hello from drones")
     displaySelect();
   });

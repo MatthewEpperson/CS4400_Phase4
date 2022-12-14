@@ -7,16 +7,21 @@ function displaySelect() {
 }
 
 let pilotData = null;
+let droneData = null;
 
 function displaySelectHandler() {
     if (this.response.success) {
         console.log("SUCCESSSS");
-        if (this.response.data) {
-            let data = this.response.data;
-            pilotData = data;
+        if (this.response.pilots) {
+            pilotData = this.response.pilots
+            droneData = this.response.drones
             // document.getElementById("select_output").innerText = JSON.stringify(this.response.data)     }
-            for (let i = 0; i < data.length; i++) {
-                populateTable(data[i]);
+            for (let i = 0; i < pilotData.length; i++) {
+                populateTable(pilotData[i], "pilotTable");
+            }
+
+            for (let i = 0; i < droneData.length; i++) {
+                populateTable(droneData[i], "droneTable")
             }
         }
     } else {
@@ -26,41 +31,9 @@ function displaySelectHandler() {
 }
 
 
-function filterTable() {
-    let username = document.getElementById('username').value;
-    let licenseID = document.getElementById('licenseID').value;
-    if (pilotData != null) {
-        clearTable();
-        for (const pilot of pilotData) {
-            if (username != "" && licenseID == "") {
-                if (pilot.username == username) {
-                    populateTable(pilot);
-                    continue;
-                }
-            }
-            if (licenseID != "" && username == "") {
-                if (pilot.licenseID == licenseID) {
-                    populateTable(pilot);
-                    continue;
-                }
-            }
-            if (licenseID != "" && username != "") {
-                if (pilot.licenseID == licenseID && pilot.username == username) {
-                    populateTable(pilot);
-                    continue;
-                }
-            }
-            if (licenseID == "" && username == "") {
-                populateTable(pilot);
-            }
-        }
-    }
-    
-}
 
-
-function clearTable() {
-    const table = document.getElementById("pilotTable");
+function clearTable(tableName) {
+    const table = document.getElementById(tableName);
 
     for (let i = table.rows.length - 1; i > 0; i--) {
         table.deleteRow(i);
@@ -68,9 +41,9 @@ function clearTable() {
 }
 
 
-function populateTable(items) {
+function populateTable(items, tableName) {
     console.log(items);
-    const table = document.getElementById("pilotTable");
+    const table = document.getElementById(tableName);
 
     let itemKeys = Object.keys(items);
     
@@ -91,26 +64,110 @@ function populateTable(items) {
             j++;
         }
     }
+
+    if (tableName == "droneTable") {
+        let colName = row.insertCell(itemKeys.length)
+        let btn = document.createElement("button")
+        btn.type = "text"
+        btn.innerText = "Remove Drone"
+        btn.id = `${items['id']} ${items['tag']}`
+        btn.onclick = function() {
+            removeDrone(btn.id)
+        }
+        colName.appendChild(btn)
+    }
 }
 
 
-document.getElementById('username').onchange = function() {
-    filterTable();
-};
+function addDrone(droneID, droneTag, droneFuel, droneCapacity, droneSales, droneFlownBy) {
+    if (droneID == "" || droneTag == "") {
+        alert("DroneID or droneTag were empty!")
+        return
+    }
+    let information = `droneID=${droneID}&droneTag=${droneTag}&droneFuel=${droneFuel}&droneCapacity=${droneCapacity}` +
+                        `&droneSales=${droneSales}&droneFlownBy=${droneFlownBy}`
+    addDroneRequest(information)
+    clearTable("droneTable")
+    displaySelect()
+}
 
-document.getElementById('licenseID').onchange = function() {
-    filterTable();
-};
+
+function removeDrone(drone) {
+    let droneSplit = drone.split(" ")
+    let droneID = droneSplit[0]
+    let droneTag = droneSplit[1]
+
+    let information = `droneID=${droneID}&droneTag=${droneTag}`
+    console.log(information)
+    removeDroneRequest(information)
+    clearTable("droneTable")
+    displaySelect()
+}
+
+
+function addDroneRequest(information) {
+    let xml = new XMLHttpRequest
+    xml.responseType = "json"
+    xml.addEventListener("load", addDroneResponse)
+    url = "/attempt-add-drone"
+
+    xml.open("POST", url)
+    xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xml.send(information)
+}
+
+
+function addDroneResponse() {
+
+}
+
+
+function removeDroneRequest(information) {
+    let xml = new XMLHttpRequest
+    xml.responseType = "json"
+    xml.addEventListener("load", removeDroneResponse)
+    url = "/attempt-remove-drone"
+
+    xml.open("POST", url)
+    xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xml.send(information)
+}
+
+
+function removeDroneResponse() {
+
+}
 
 document.getElementById('clearBtn').onclick = function() {
     document.getElementById('username').value = "";
     document.getElementById('licenseID').value = "";
-    clearTable();
-    filterTable();
+    clearTable("droneTable")
+    clearTable("pilotTable")
+    displaySelect()
 };
+
+
+document.getElementById("addDroneBtn").onclick = function() {
+    let droneID = document.getElementById("inputDroneID")
+    let droneTag = document.getElementById("inputDroneTag")
+    let droneFuel = document.getElementById("inputDroneFuel")
+    let droneCapacity = document.getElementById("inputDroneCapacity")
+    let droneSales = document.getElementById("inputDroneSales")
+    let droneFlownBy = document.getElementById("inputFlownBy")
+    addDrone(droneID.value, droneTag.value, droneFuel.value, droneCapacity.value,
+                droneSales.value, droneFlownBy.value)
+}
+
+
+document.getElementById("removeDroneBtn").onclick = function() {
+    let droneID = document.getElementById("inputDroneID")
+    let droneTag = document.getElementById("inputDroneTag")
+
+    removeDrone(`${droneID.value} ${droneTag.value}`)
+}
 
 document.addEventListener("DOMContentLoaded", function() {
     displaySelect();
   });
 
-document.getElementById("query_input").addEventListener("click", displaySelect);
+// document.getElementById("query_input").addEventListener("click", displaySelect);

@@ -23,7 +23,7 @@ const connection = mysql.createConnection({
 
     host: "localhost",
     user: "root",
-    password: "password",
+    password: "Olaolu5796",
     database: "restaurant_supply_express"
 
 })
@@ -386,7 +386,7 @@ app.post("/attempt-fund-restaurant", function(req, res) {
             res.json({success: false, message: "database query failed for /attempt-fund-restaurant"})
             console.log(err.message)
         } else {
-            res.json({success: true, message: "successfully funded ingredient"})
+            res.json({success: true, message: "successfully funded restaurant"})
             console.log("restaurant was funded")
         }
     })

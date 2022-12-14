@@ -709,7 +709,9 @@ app.get("/display-employee-view", function(req, res) {
     connection.query(employeeQuery, function(err, rows) {
         if (err) {
             console.log(err.message)
-            res.json({success: false, message:"database query failed for /display-select"})
+            console.log("fail employee")
+            res.json({success: false, message:"database query failed for /display-employee"})
+            return
         } else {
             employees = rows
         }
@@ -718,7 +720,9 @@ app.get("/display-employee-view", function(req, res) {
     let workers;
     connection.query(workerQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            console.log("fail worker")
+            res.json({success: false, message:"database query failed for /display-worker"})
+            return
         } else {
             console.log(workerQuery);
             workers = rows
@@ -728,14 +732,15 @@ app.get("/display-employee-view", function(req, res) {
     let pilots;
     connection.query(pilotQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            console.log("fail pilot")
+            res.json({success: false, message:"database query failed for /display-pilot"})
+            return
         } else {
             console.log(pilotQuery);
             pilots = rows
             res.json({success: true, employees: employees, workers: workers, pilots: pilots})
         }
     })
-    console.log("asdfjasdf")
 })
 
 app.post("/fire-employee", function(req, res) {

@@ -18,6 +18,14 @@ table, tr, th{
     border-collapse: collapse;
 }
 
+.table-align {
+    display: inline-table;
+    justify-content: space-between;
+    margin-right: 10em;
+}
+
+
+
 td {
     padding-left: 15px;
     padding-right: 15px;
@@ -36,7 +44,10 @@ th{
   .topnav a {
     float: left;
     color: #f2f2f2;
+    display: inline-flex;
     text-align: center;
+    justify-content: space-between;
+    justify-items: center;
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;

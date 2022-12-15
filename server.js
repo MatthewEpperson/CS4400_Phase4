@@ -270,8 +270,8 @@ app.post("/attempt-fund-restaurant", function(req, res) {
     let fundRestaurant = 'call start_funding(?, ?)'
     console.log(JSON.stringify(req.body))
     connection.query(fundRestaurant, [
-        req.body.owner,
-        req.body.longName,
+        req.body.usernameOwner,
+        req.body.rName,
     ], function(err, rows){
         if (err) {
             res.json({success: false, message: "database query failed for /attempt-fund-restaurant"})

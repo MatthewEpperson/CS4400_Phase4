@@ -156,4 +156,4 @@ function addServiceResponse() {
 
 }
 
-document.getElementById("query_input").addEventListener("click", displaySelect);
+document.addEventListener("DOMContentLoaded", displaySelect);

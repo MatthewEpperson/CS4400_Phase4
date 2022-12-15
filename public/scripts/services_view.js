@@ -157,7 +157,7 @@ function addServiceResponse() {
 }
 
 document.addEventListener("DOMContentLoaded", displaySelect);
-=======
+
 document.getElementById("manageServiceBtn").onclick = function () {
     let username = document.getElementById("inputUsername")
     let serviceID = document.getElementById("inputServiceID")

@@ -42,7 +42,6 @@ function clearTable(tableName) {
 
 
 function populateTable(items, tableName) {
-    console.log(items);
     const table = document.getElementById(tableName);
 
     let itemKeys = Object.keys(items);
@@ -87,8 +86,7 @@ function addDrone(droneID, droneTag, droneFuel, droneCapacity, droneSales, drone
     let information = `droneID=${droneID}&droneTag=${droneTag}&droneFuel=${droneFuel}&droneCapacity=${droneCapacity}` +
                         `&droneSales=${droneSales}&droneFlownBy=${droneFlownBy}`
     addDroneRequest(information)
-    clearTable("droneTable")
-    displaySelect()
+
 }
 
 
@@ -100,8 +98,8 @@ function removeDrone(drone) {
     let information = `droneID=${droneID}&droneTag=${droneTag}`
     console.log(information)
     removeDroneRequest(information)
-    clearTable("droneTable")
-    displaySelect()
+    // clearTable("droneTable")
+    // displaySelect()
 }
 
 
@@ -118,7 +116,9 @@ function addDroneRequest(information) {
 
 
 function addDroneResponse() {
-
+    clearTable("droneTable")
+    clearTable("pilotTable")
+    displaySelect()
 }
 
 
@@ -135,16 +135,18 @@ function removeDroneRequest(information) {
 
 
 function removeDroneResponse() {
-
-}
-
-document.getElementById('clearBtn').onclick = function() {
-    document.getElementById('username').value = "";
-    document.getElementById('licenseID').value = "";
     clearTable("droneTable")
     clearTable("pilotTable")
     displaySelect()
-};
+}
+
+// document.getElementById('clearBtn').onclick = function() {
+//     document.getElementById('username').value = "";
+//     document.getElementById('licenseID').value = "";
+//     clearTable("droneTable")
+//     clearTable("pilotTable")
+//     displaySelect()
+// };
 
 
 document.getElementById("addDroneBtn").onclick = function() {

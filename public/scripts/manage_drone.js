@@ -19,12 +19,12 @@ let ds_map = new Map()
 function displaySelectHandler() {
     if (this.response.success) {
         console.log("SUCCESSSS");
-        console.log(this.response.drones);
+        // console.log(this.response.drones);
         if (this.response.drones && this.response.ingredients && this.response.deliveryServices) {
             let data = this.response.drones;
             let ingredientData = this.response.ingredients;
             deliveryServiceData = this.response.deliveryServices;
-            console.log(deliveryServiceData)
+            // console.log(deliveryServiceData)
             droneData = data;
             payload = this.response.payload
 
@@ -58,7 +58,7 @@ function displaySelectHandler() {
                 }
 
             }
-            console.log(payload_map)
+            // console.log(payload_map)
         }
     } else {
         console.log("FAILURE");
@@ -146,7 +146,7 @@ function populateTable(items, tableName) {
 
 function loadDrone(drone, location) {
     let droneSplit = drone.split(" ");
-    console.log(location)
+    // console.log(location)
     let droneID = droneSplit[1]
     let droneTag = droneSplit[2]
     let barcode = document.getElementById(`barcode ${droneID} ${droneTag}`)
@@ -178,8 +178,7 @@ function loadDrone(drone, location) {
 
               
     loadDroneRequest(information)
-    clearTable("payloadTable")
-    displaySelect()
+    
     
 }
 
@@ -191,7 +190,7 @@ function refuelDrone(drone, currAmt, hover) {
     let droneTag = droneSplit[2];
 
     console.log(droneID)
-    console.log(currAmt)
+    // console.log(currAmt)
     
     let information = `droneid=${droneID}&dronetag=${droneTag}&fuel_amount=${fuelAmt.value}`
     
@@ -204,8 +203,7 @@ function refuelDrone(drone, currAmt, hover) {
                     && deliveryServiceData[i]['home_base'] == hover) {
                         console.log(`${fuelAmt.value} ${droneID} ${droneTag}`);
                         refuelRequest(information)
-                        clearTable("droneTable")
-                        displaySelect();
+                        
                         refuelSuccess = true
                     }
             }
@@ -250,9 +248,15 @@ function loadDroneRequest(information) {
 }
 
 function loadDroneResponse() {
-
+    clearTable("droneTable")
+    clearTable("ingredientTable")
+    clearTable("payloadTable");
+    displaySelect()
 }
 
 function refuelResponse() {
-
+    clearTable("droneTable")
+    clearTable("ingredientTable")
+    clearTable("payloadTable");
+    displaySelect()
 }

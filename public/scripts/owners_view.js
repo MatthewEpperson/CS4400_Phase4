@@ -39,52 +39,52 @@ function displaySelectHandler() {
 }
 
 
-function filterTable() {
-    let username = document.getElementById('username').value;
-    let firstName = document.getElementById('firstName').value;
-    let lastName = document.getElementById('lastName').value;
-    if (ownersData != null) {
-        clearTable("ownerTable");
-        for (const owner of ownersData) {
-            if (username != "" && firstName == "" && lastName == "") {
-                if (owner.username == username) {
-                    populateTable(owner, "ownerTable");
-                    continue;
-                }
-            }
-            if (lastName != "" && username == "" && firstName == "") {
-                if (owner.last_name == lastName) {
-                    populateTable(owner, "ownerTable");
-                    continue;
-                }
-            }
-            if (firstName != "" && username == "" && lastName == "") {
-                if (owner.first_name == firstName) {
-                    populateTable(owner, "ownerTable");
-                    continue;
-                }
-            }
-            if (lastName != "" && firstName != "" && username == "") {
-                if (owner.last_name == lastName && owner.first_name == firstName) {
-                    populateTable(owner, "ownerTable");
-                    continue;
-                }
-            }
+// function filterTable() {
+//     let username = document.getElementById('username').value;
+//     let firstName = document.getElementById('firstName').value;
+//     let lastName = document.getElementById('lastName').value;
+//     if (ownersData != null) {
+//         clearTable("ownerTable");
+//         for (const owner of ownersData) {
+//             if (username != "" && firstName == "" && lastName == "") {
+//                 if (owner.username == username) {
+//                     populateTable(owner, "ownerTable");
+//                     continue;
+//                 }
+//             }
+//             if (lastName != "" && username == "" && firstName == "") {
+//                 if (owner.last_name == lastName) {
+//                     populateTable(owner, "ownerTable");
+//                     continue;
+//                 }
+//             }
+//             if (firstName != "" && username == "" && lastName == "") {
+//                 if (owner.first_name == firstName) {
+//                     populateTable(owner, "ownerTable");
+//                     continue;
+//                 }
+//             }
+//             if (lastName != "" && firstName != "" && username == "") {
+//                 if (owner.last_name == lastName && owner.first_name == firstName) {
+//                     populateTable(owner, "ownerTable");
+//                     continue;
+//                 }
+//             }
 
-            if (lastName != "" && firstName != "" && username != "") {
-                if (owner.last_name == lastName && owner.first_name == firstName && owner.username == username) {
-                    populateTable(owner, "ownerTable");
-                    continue;
-                }
-            }
+//             if (lastName != "" && firstName != "" && username != "") {
+//                 if (owner.last_name == lastName && owner.first_name == firstName && owner.username == username) {
+//                     populateTable(owner, "ownerTable");
+//                     continue;
+//                 }
+//             }
 
-            if (firstName == "" && username == "" && lastName == "") {
-                populateTable(owner, "ownerTable");
-            }
-        }
-    }
+//             if (firstName == "" && username == "" && lastName == "") {
+//                 populateTable(owner, "ownerTable");
+//             }
+//         }
+//     }
     
-}
+// }
 
 
 function clearTable(tableName) {
@@ -122,24 +122,27 @@ function populateTable(items, tableName) {
 }
 
 
-document.getElementById('username').onchange = function() {
-    filterTable();
-};
+// document.getElementById('username').onchange = function() {
+//     filterTable();
+// };
 
-document.getElementById('firstName').onchange = function() {
-    filterTable();
-};
+// document.getElementById('firstName').onchange = function() {
+//     filterTable();
+// };
 
-document.getElementById('lastName').onchange = function() {
-    filterTable();
-};
+// document.getElementById('lastName').onchange = function() {
+//     filterTable();
+// };
 
 document.getElementById('clearBtn').onclick = function() {
     document.getElementById('username').value = "";
     document.getElementById('firstName').value = "";
     document.getElementById('lastName').value = "";
-    clearTable();
-    filterTable();
+    clearTable("ownerTable")
+    clearTable("ownerTable2")
+    clearTable("userTable")
+    displaySelect()
+    // filterTable();
 };
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -189,11 +192,11 @@ document.getElementById("fundBtn").onclick = function() {
     let usernameOwner = document.getElementById("usernameOwner")
     let rName = document.getElementById("restName")
 
-    addOwner(usernameOwner.value, rName.value)
-    for (let i = 0; i < tableNames.length; i++) {
-        clearTable(tableNames[i])
-    }
-    displaySelect()
+    fundRestaurant(usernameOwner.value, rName.value)
+    // for (let i = 0; i < tableNames.length; i++) {
+    //     clearTable(tableNames[i])
+    // }
+    // displaySelect()
 }
 
 function fundRestaurant(usernameOwner, rName) {

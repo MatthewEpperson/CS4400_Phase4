@@ -126,6 +126,7 @@ function addLocationRequest(information) {
     xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
     xml.send(information)
 
+    clearTable("locationTable")
     clearTable("locationTable2")
     displaySelect()
 }
@@ -135,19 +136,21 @@ function addLocationResponse() {
 }
 
 
-document.getElementById('name').onchange = function() {
-    filterTable();
-};
+// document.getElementById('name').onchange = function() {
+//     filterTable();
+// };
 
-document.getElementById('drones').onchange = function() {
-    filterTable();
-};
+// document.getElementById('drones').onchange = function() {
+//     filterTable();
+// };
 
 document.getElementById('clearBtn').onclick = function() {
     document.getElementById('name').value = "";
     document.getElementById('drones').value = "";
     clearTable("locationTable");
-    filterTable();
+    displaySelect();
+
+    // filterTable();
 };
 
 document.addEventListener("DOMContentLoaded", function() {

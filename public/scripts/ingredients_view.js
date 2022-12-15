@@ -103,12 +103,6 @@ function populateTable(items, tableName) {
     }
 }
 
-function addIngredient(barcode, name, weight) {
-    let information = `barcode=${barcode}&name=${name}&weight=${weight}`
-    addIngredientRequest(information)
-    clearTable("ingredientTable2")
-    displaySelect()
-}
 
 
 function removeIngredient(barcode) {
@@ -124,7 +118,7 @@ function removeIngredientRequest(information) {
     xml.responseType = "json"
     xml.addEventListener("load", addIngredientResponse)
     url = "/attempt-remove-ingredient"
-
+    
     xml.open("POST", url)
     xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
     xml.send(information)
@@ -143,19 +137,26 @@ function addIngredientRequest(information) {
 }
 
 function addIngredientResponse() {
-
+    
 }
 
+function addIngredient(barcode, name, weight) {
+    let information = `barcode=${barcode}&name=${name}&weight=${weight}`
+    addIngredientRequest(information)
+    clearTable("ingredientTable")
+    clearTable("ingredientTable2")
+    displaySelect()
+}
 
-document.getElementById('name').onchange = function() {
-    filterTable();
-};
-
-document.getElementById('location').onchange = function() {
-    filterTable();
-};
-
-
+// document.getElementById('name').onchange = function() {
+    //     filterTable();
+    // };
+    
+    // document.getElementById('location').onchange = function() {
+        //     filterTable();
+        // };
+        
+        
 document.getElementById('submitIngredient').onclick = function() {
     let barcode = document.getElementById('inputBarcode')
     let name = document.getElementById('inputIngredientName')
@@ -164,15 +165,16 @@ document.getElementById('submitIngredient').onclick = function() {
     addIngredient(barcode.value, name.value, weight.value)
 }
 
-document.getElementById('clearBtn').onclick = function() {
-    document.getElementById('name').value = "";
-    document.getElementById('location').value = "";
-    clearTable("ingredientTable");
-    filterTable();
-};
+// document.getElementById('clearBtn').onclick = function() {
+//     document.getElementById('name').value = "";
+//     document.getElementById('location').value = "";
+//     clearTable("ingredientTable");
+//     displaySelect()
+//     filterTable();
+// };
 
 document.addEventListener("DOMContentLoaded", function() {
     displaySelect();
   });
 
-document.getElementById("query_input").addEventListener("click", displaySelect);
+// document.getElementById("query_input").addEventListener("click", displaySelect);

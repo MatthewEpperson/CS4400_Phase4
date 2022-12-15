@@ -4,7 +4,7 @@
 
 The database chosen for this project is MySQL. Express JS was used as the server component of the project. In server.js, the connection from the server to the database is made. In order to apply the server to your database, just change the following values at the top of ```server.js``` file:
 
-![image](./sqlconnection.png)
+![image](./images/sqlconnection.png)
 
 For us, we used localhost, our individual usernames and passwords. We were using the restaurant_supply_express provided, so for database: "restaurant_supply_express" was what we used.
 
@@ -13,9 +13,9 @@ npm install. If you do not have npm or node, you will have to install those. Aft
 
 To start up the server, make sure you are in the same directory as server js and type: ```node server.js```
 
-It current listens on port 8080. You can change this setting in the server file
+It current listens on port 8080. You can change this setting in the
 
-Then, in your browser of choice, navigate to ```localhost:8080/main``` to access the website. You should be good to go from there. If you have trouble with the MySQL database select, make sure you have disabled ```only_group_by_full``` in MySQL.
+Then, in your browser of choice, navigate to ```localhost:8080``` to access the website. You should be good to go from there. If you have trouble with the MySQL database select, make sure you have disabled ```only_group_by_full``` in MySQL.
 
 ## Technologies
 

@@ -16,7 +16,7 @@
         <a href="services_view">Services View</a>
     </div>
     <div id="container">
-        <h1 id = "title">Services</h1>
+        <h1 id = "title">Services View</h1>
         <label for="serviceID">ID:</label>
         <input type="text" id="serviceID">
         <label for="serviceName">&nbsp &nbsp Name:</label>
@@ -46,8 +46,14 @@
             <tbody id="testBody"></tbody>
         </table>
         <table id="serviceTable2" class="sortable">
+            <h1> Delivery Services </h1>
+            <label for="inputUsername">Username: </label>
+            <input type="text" id="inputUsername">
+            <label for="inputServiceID">&nbsp &nbsp Service ID: </label>
+            <input type="text" id="inputServiceID">
+            <button type="button" id="manageServiceBtn">Manage Service</button>
+            <br><br>
             <thead>
-                <h1> Delivery Services </h1>
                 <tr>
                     <th>Service ID</th>
                     <th>Name</th>

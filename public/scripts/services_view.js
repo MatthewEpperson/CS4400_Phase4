@@ -156,4 +156,37 @@ function addServiceResponse() {
 
 }
 
+document.getElementById("manageServiceBtn").onclick = function () {
+    let username = document.getElementById("inputUsername")
+    let serviceID = document.getElementById("inputServiceID")
+
+    manageService(username.value, serviceID.value)
+}
+
+
+function manageService(username, serviceID) {
+    let information = `username=${username}&serviceID=${serviceID}`
+    manageServiceRequest(information)
+}
+
+
+function manageServiceRequest(information) {
+    let xml = new XMLHttpRequest
+    xml.responseType = "json"
+    xml.addEventListener("load", manageServiceResponse)
+    url = "/attempt-manage-service"
+    
+    xml.open("POST", url)
+    xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xml.send(information)
+    clearTable("serviceTable")
+    clearTable("serviceTable2")
+    displaySelect()
+}
+
+function manageServiceResponse() {
+
+}
+
+
 document.getElementById("query_input").addEventListener("click", displaySelect);

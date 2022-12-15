@@ -1,3 +1,5 @@
+let tableNames = ["ownerTable", "userTable", "ownerTable2"]
+
 function displaySelect() {
     let xhr = new XMLHttpRequest
     xhr.addEventListener("load", displaySelectHandler)
@@ -188,6 +190,10 @@ document.getElementById("fundBtn").onclick = function() {
     let rName = document.getElementById("restName")
 
     addOwner(usernameOwner.value, rName.value)
+    for (let i = 0; i < tableNames.length; i++) {
+        clearTable(tableNames[i])
+    }
+    displaySelect()
 }
 
 function fundRestaurant(usernameOwner, rName) {

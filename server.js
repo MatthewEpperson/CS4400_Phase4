@@ -3,17 +3,7 @@ const express = require("express")
 const { json } = require("express/lib/response")
 const res = require("express/lib/response")
 
-const USER_TYPE = {
-    Pilot: 0,
-    Manager: 1,
-    Worker: 2,
-    Owner: 3
-  }
-
-
 const app = express()
-let authenticated = false;
-let user = {} 
 
 app.use(express.urlencoded({
     extended: false
@@ -45,23 +35,6 @@ app.listen(8080, function() {
 })
 
 // Database successfully established after this point
-
-app.get("/attempt-login", function(req, res) {
-    userQuery = "select * from users where username = ?"
-    connection.query(userQuery, [req.body.username],function(err, rows) {
-        if (err) {
-            res.json({success: false, message:"database query failed for /attempt_login"})
-        } else {
-            if (rows.length == 0) {
-                res.json({sucess: false, message: "user not found in database"})
-            } else if (rows.length == 1) {
-                res.json({success: true, message: "database query successful for /attempt-login"})
-            } else {
-                res.json({success: false, message: "too many users with that username found"})
-            }
-        }
-    })
-})
 
 
 app.get("/display-drones-view", function(req, res) {
@@ -274,106 +247,6 @@ app.post("/attempt-takeover-drone", function(req, res) {
     })
 })
 
-app.post("/login-worker", function(req, res) {
-    let command = "select * from workers where username = ? and username not in (select manager from delivery_services)"
-    connection.query(command, [req.body.username], function(err, rows) {
-        if (err) {
-            console.log(err.message)
-            res.json({success: false, message: err.message})
-        } else {
-            if (rows.length == 0) {
-                res.json({success: false, message: "invalid username or username not found"})
-            } else if (rows.length == 1) {
-
-                authenticated = true
-                user.type = USER_TYPE.Worker
-                user.username = req.body.username
-                work_for = getWorkFor(req.body.username)
-                user.serviceId = work_for
-
-                res.json({success: true, message: "successfully signed in"})
-            } else if (rows.length > 1) {
-                res.json({success: false, message: "Problem with database: duplicate users"})
-            }
-        }
-    })
-})
-
-app.post("/login-manager", function(req, res) {
-    let command = "select * from delivery_services where manager = ?"
-    connection.query(command, [req.body.username], function(err, rows) {
-        if (err) {
-            console.log(err.message)
-            res.json({success: false, message: err.message})
-        } else {
-            if (rows.length == 0) {
-                res.json({success: false, message: "invalid username or username not found"})
-            } else if (rows.length == 1) {
-
-                authenticated = true
-                user.serviceId = rows[0]["id"]
-                user.type = USER_TYPE.Manager
-                user.username = req.body.username
-
-                res.json({success: true, message: "successfully signed in"})
-            } else if (rows.length > 1) {
-                res.json({success: false, message: "Problem with database: duplicate users"})
-            }
-        }
-    })
-})
-
-app.post("/login-pilot", function(req, res) {
-    let command = "select * from pilots where username = ? and username not in (select manager from delivery_services)"
-    connection.query(command, [req.body.username], function(err, rows) {
-        if (err) {
-            console.log(err.message)
-            res.json({success: false, message: err.message})
-        } else {
-            if (rows.length == 0) {
-                res.json({success: false, message: "invalid username or username not found"})
-            } else if (rows.length == 1) {
-
-                authenticated = true
-                user.type = USER_TYPE.Pilot
-                work_for = getWorkFor(req.body.username)
-                user.serviceId = work_for
-                user.username = req.body.username
-
-                res.json({success: true, message: "successfully signed in"})
-            } else if (rows.length > 1) {
-                res.json({success: false, message: "Problem with database: duplicate users"})
-            }
-        }
-    })
-})
-
-app.post("/login-owner", function(req, res) {
-    let command = "select * from restaurant_owners where username = ?"
-    console.log(JSON.stringify(req.body))
-    connection.query(command, [req.body.username], function(err, rows) {
-        if (err) {
-            console.log(err.message)
-            res.json({success: false, message: err.message})
-        } else {
-            if (rows.length == 0) {
-                res.json({success: false, message: "invalid username or username not found"})
-            } else if (rows.length == 1) {
-                authenticated = true
-
-                user.type = USER_TYPE.Owner
-                user.username = req.body.username
-                user.restaurants = getRestaurants(req.body.username)
-
-                res.json({success: true, message: "successfully signed in"})
-            } else if (rows.length > 1) {
-                res.json({success: false, message: "Problem with database: duplicate users"})
-            }
-        }
-    })
-})
-
-
 app.post("/attempt-add-ingredient", function(req, res) {
     let addIngredient = 'call add_ingredient(?, ?, ?)'
     console.log(JSON.stringify(req.body))
@@ -464,7 +337,6 @@ app.post("/attempt-add-owner", function(req, res) {
     })
 })
 
-
 app.post("/attempt-add-worker-role", function(req, res) {
     let workerRole = 'call add_worker_role(?)'
     connection.query(workerRole, [
@@ -480,7 +352,6 @@ app.post("/attempt-add-worker-role", function(req, res) {
     })
 })
 
-
 app.post("/attempt-remove-pilot-role", function(req, res) {
     let pilotRole = 'call remove_pilot_role(?)'
     connection.query(pilotRole, [
@@ -495,7 +366,6 @@ app.post("/attempt-remove-pilot-role", function(req, res) {
         }
     })
 })
-
 
 app.post("/attempt-purchase-ingredient", function(req, res) {
     let purchaseIngredient = 'call purchase_ingredient(?, ?, ?, ?, ?)'
@@ -515,8 +385,6 @@ app.post("/attempt-purchase-ingredient", function(req, res) {
         }
     })
 })
-
-
 
 app.post("/attempt-add-location", function(req, res) {
     let addLocation = 'call add_location(?, ?, ?, ?)'
@@ -552,66 +420,6 @@ app.post("/attempt-add-restaurant", function(req, res) {
             console.log("location was added")
         }
     })
-})
-
-
-app.post("/attempt-register", function(req, res){
-    query = "select * from users where username = ?"
-    connection.query(query, [req.body.username], function(err, rows) {
-        if (err) {
-            res.json({success: false, message: "database query failed for /attempt_register"})
-            console.log(`database error for ${req.body.username}`)
-        } else {
-            if (rows.length == 1) {
-                res.json({success: false, message: "username already taken"})
-                console.log(`username already taken error for ${req.body.username}`)
-
-            } else if (rows.length == 0) {
-                // TODO implement the registration page form
-                if (req.body.type === "Employee") {
-                    insertUser = 'call add_employee(?, ?, ?, ?, ?, ?, null, ?, null);'
-                    connection.query(insertUser, [
-                        req.body.username,
-                        req.body.fname,
-                        req.body.lname,
-                        req.body.address,
-                        req.body.bdate,
-                        req.body.taxID,
-                        req.body.experience
-                        ], function(err, rows) {
-                            if (err) {
-                                console.log(err.message)
-                                res.json({success: false, message: "database insert failed for /attempt_register (employee)"})
-                            } else {
-                                res.json({success: true, message: "successfully added employee"})
-                            }
-                        })
-
-                } else if (req.body.type === 'Owner') {
-                    insertUser = 'call add_owner(?, ?, ?, ?, ?);'
-                    connection.query(insertUser, [
-                        req.body.username,
-                        req.body.fname,
-                        req.body.lname,
-                        req.body.address,
-                        req.body.bdate,
-                        ], function(err, rows) {
-                            if (err) {
-                                console.log(err.message)
-                                res.json({success: false, message: "database insert failed for /attempt_register (owner)"})
-                            } else {
-                                authenticated = true;
-                                user.type = 2
-                                user.username = req.body.username
-                                res.json({success: true, message: "successfully added owner", user: user})
-                            }
-                        })
-                } else {
-                    res.json({success: false, message: `Type invalid`})
-                }
-            }
-        }
-    })    
 })
 
 app.post("/add-employee", function(req, res){
@@ -653,21 +461,6 @@ app.post("/add-employee", function(req, res){
     })    
 })
 
-app.get("/checkedLoggedIn", function(req, res) { 
-    if (authenticated) {
-        res.json({success: true, message: "User is signed in", user: user})
-    } else {
-        res.json({success: false, message: "User not signed in"})
-    }
-})
-
-app.get("/update-authenticated", function(req, res) {
-    authenticated = false;
-    res.json({success: true})
-})
-
-
-
 app.get("/display-ingredients-view", function(req, res) {
     userQuery = "select * from display_ingredient_view"
     ingredientQuery = "select * from ingredients"
@@ -675,7 +468,7 @@ app.get("/display-ingredients-view", function(req, res) {
     let ingredientView;
     connection.query(userQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-ingredients-view"})
         } else {
             ingredientView = rows
             console.log(userQuery);
@@ -685,7 +478,7 @@ app.get("/display-ingredients-view", function(req, res) {
     let ingredients;
     connection.query(ingredientQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-ingredients-view"})
         } else {
             ingredients = rows
             console.log(ingredientQuery);
@@ -699,7 +492,7 @@ app.get("/display-owner", function(req, res) {
     userQuery = "select * from restaurants"
     connection.query(userQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-owner"})
         } else {
             console.log(userQuery);
             res.json({success: true, restaurants: rows})
@@ -716,7 +509,7 @@ app.get("/display-locations-view", function(req, res) {
     connection.query(locationView, function(err, rows) {
         if (err) {
             console.log(err.message)
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-locations-view"})
         } else {
             console.log(locationView);
             locationViews = rows
@@ -726,7 +519,7 @@ app.get("/display-locations-view", function(req, res) {
     let locations;
     connection.query(allLocation, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-locations-view"})
         } else {
             locations = rows
             res.json({success: true, locationViews: locationViews, locations: locations})
@@ -832,7 +625,7 @@ app.get("/display-restaurants", function(req, res) {
     let restaurants;
     connection.query(restaurantQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-restaurants"})
         } else {
             restaurants = rows
         }
@@ -841,7 +634,7 @@ app.get("/display-restaurants", function(req, res) {
     let drones;
     connection.query(droneQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-restaurants"})
         } else {
             drones = rows
         }
@@ -850,7 +643,7 @@ app.get("/display-restaurants", function(req, res) {
     let payloads;
     connection.query(payloadQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-restaurants"})
         } else {
             payloads = rows
             res.json({success: true, restaurants: restaurants, drones: drones, payloads: payloads})
@@ -868,7 +661,7 @@ app.get("/display-owners-view", function(req, res) {
     let ownerViewTable;
     connection.query(ownerView, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-owners-view"})
         } else {
             console.log(ownerView);
             ownerViewTable = rows
@@ -878,7 +671,7 @@ app.get("/display-owners-view", function(req, res) {
     let users;
     connection.query(userQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-owners-view"})
         } else {
             console.log(userQuery);
             users = rows
@@ -888,7 +681,7 @@ app.get("/display-owners-view", function(req, res) {
     let restaurantOwners;
     connection.query(restaurantQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-owners-view"})
         } else {
             console.log(restaurantQuery);
             restaurantOwners = rows
@@ -907,7 +700,7 @@ app.get("/display-drones", function(req, res) {
     let drones;
     connection.query(userQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-drones"})
         } else {
             drones = rows
             // res.json({success: true, data: rows})
@@ -917,7 +710,7 @@ app.get("/display-drones", function(req, res) {
     let ingredients;
     connection.query(ingredientsQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-drones"})
         } else {
             console.log(userQuery);
             // res.json({success: true, ingredients: rows})
@@ -927,7 +720,7 @@ app.get("/display-drones", function(req, res) {
     let deliveryServices;
     connection.query(deliverServiceQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-drones"})
         } else {
             // console.log(userQuery);
             deliveryServices = rows
@@ -936,7 +729,7 @@ app.get("/display-drones", function(req, res) {
     let payloads;
     connection.query(payloadQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-drones"})
         } else {
             // console.log(userQuery);
             payloads = rows
@@ -955,7 +748,7 @@ app.get("/display-pilots-view", function(req, res) {
     let pilots;
     connection.query(pilotQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-pilots-view"})
         } else {
             console.log(pilotQuery);
             pilots = rows
@@ -965,7 +758,7 @@ app.get("/display-pilots-view", function(req, res) {
     let drones;
     connection.query(droneQuery, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-pilots-view"})
         } else {
             console.log(droneQuery);
             drones = rows
@@ -997,7 +790,7 @@ app.get("/display-services-view", function(req, res) {
     connection.query(serviceView, function(err, rows) {
         if (err) {
             console.log(err.message)
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-service-view"})
         } else {
             serviceViewTable = rows
         }
@@ -1006,7 +799,7 @@ app.get("/display-services-view", function(req, res) {
     let services;
     connection.query(serviceTable, function(err, rows) {
         if (err) {
-            res.json({success: false, message:"database query failed for /display-select"})
+            res.json({success: false, message:"database query failed for /display-service-view"})
         } else {
             services = rows
             res.json({success: true, serviceViewData: serviceViewTable, services: services})
@@ -1015,25 +808,12 @@ app.get("/display-services-view", function(req, res) {
 })
 
 
-app.get("/main", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "index.html");
-})
-
 app.get("/registration", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "registration.html")
 })
 
 app.get("/", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "index.html")
-})
-app.get("/home", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "home.html")
-})
-app.get("/login", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "login.html")
-})
-app.get("/owner", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "owner.html")
+    res.sendFile(__dirname + "/public/views/" + "employees_view.html")
 })
 
 app.get("/restaurants", function(req, res){
@@ -1043,10 +823,6 @@ app.get("/restaurants", function(req, res){
 app.get("/services_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "services_view.html");
 })
-
-app.get("/owners_view", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "owners_view.html");
-})
 app.get("/ingredients_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "ingredients_view.html");
 })
@@ -1054,11 +830,6 @@ app.get("/ingredients_view", function(req, res){
 app.get("/owners_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "owners_view.html");
 })
-
-app.get("/drones_view", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "drones_view.html");
-})
-
 app.get("/manage_drone", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "manage_drone.html");
 })
@@ -1075,70 +846,6 @@ app.get("/employees_view", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "employees_view.html");
 })
 
-app.get("/manageEmployeesPage", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "employees_view.html");
-})
-
-app.get("/get-user", function(req, res) {
-    res.json({success: authenticated, user: user})
-})
-
-app.get("/adminPage", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "adminPage.html");
-})
-app.get("/adminAccess", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "adminAccess.html");
-})
-app.get("/loginWorker", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "loginWorker.html");
-})
-app.get("/loginPilot", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "loginPilot.html");
-})
-app.get("/loginManager", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "loginManager.html");
-})
-app.get("/loginOwner", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "loginOwner.html");
-})
-app.get("/workerPage", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "manage_drone.html");
-})
 app.get("/pilotPage", function(req, res){
     res.sendFile(__dirname + "/public/views/" + "pilotPage.html");
 })
-app.get("/managerPage", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "managerPage.html");
-})
-app.get("/ownerPage", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "ownerPage.html");
-})
-app.get("/newRestaurant", function(req, res){
-    res.sendFile(__dirname + "/public/views/" + "newRestaurant.html");
-})
-
-function getWorkFor(username) {
-    let command = "select id from work_for where username = ?"
-    connection.query(command, [username], function(err, rows) {
-        if (err) {
-            console.log(err.message)
-        } else {
-            let result = []
-            length = rows.length
-            for (let i = 0; i < length; i++) {
-                result.push(rows[i])
-            }
-        }
-    })
-}
-
-function getRestaurants(username) {
-    let command = "SELECT * FROM restaurant_supply_express.restaurants where funded_by = ?;"
-    connection.query(command, [username], function(err, rows) {
-        if (err) {
-            console.log(err.message)
-        } else {
-            return rows
-        }
-    })
-}

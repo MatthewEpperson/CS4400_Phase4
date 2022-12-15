@@ -183,6 +183,24 @@ app.post("/attempt-add-service", function(req, res) {
 })
 
 
+app.post("/attempt-manage-service", function(req, res) {
+    let manageService = 'call manage_service(?, ?)'
+    console.log(JSON.stringify(req.body))
+    connection.query(manageService, [
+        req.body.username,
+        req.body.serviceID
+    ], function(err, rows){
+        if (err) {
+            res.json({success: false, message: "database query failed for /attempt-manage-service"})
+            console.log(err.message)
+        } else {
+            res.json({success: true, message: "successfully manage service"})
+            console.log("Service managed!")
+        }
+    })
+})
+
+
 app.post("/attempt-join-swarm", function(req, res) {
     let joinSwarm = 'call join_swarm(?, ?, ?)'
     console.log(JSON.stringify(req.body))

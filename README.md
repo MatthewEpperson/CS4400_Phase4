@@ -13,6 +13,8 @@ npm install. If you do not have npm or node, you will have to install those. Aft
 
 To start up the server, make sure you are in the same directory as server js and type: ```node server.js```
 
+It current listens on port 8080. You can change this setting in the server file
+
 Then, in your browser of choice, navigate to ```localhost:8080/main``` to access the website. You should be good to go from there. If you have trouble with the MySQL database select, make sure you have disabled ```only_group_by_full``` in MySQL.
 
 ## Technologies

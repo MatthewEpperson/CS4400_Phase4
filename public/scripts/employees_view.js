@@ -127,10 +127,10 @@ document.getElementById("addPilotRole").onclick = function() {
     let experience = document.getElementById("inputExperience")
 
     addPilotRole(username.value, licenseID.value, experience.value)
-    clearTable("pilotTable")
-    clearTable("workerTable")
-    clearTable("employeeTable")
-    displaySelect()
+    // clearTable("pilotTable")
+    // clearTable("workerTable")
+    // clearTable("employeeTable")
+    // displaySelect()
 }
 
 
@@ -157,7 +157,6 @@ function addPilotRoleResponse() {
     clearTable("workerTable")
     clearTable("employeeTable")
     displaySelect()
-
 }   
 
 
@@ -175,13 +174,17 @@ function removePilotRoleRequest(information) {
     xml.open("POST", url)
     xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
     xml.send(information)
+    // clearTable("employeeTable")
+    // clearTable("pilotTable")
+    // clearTable("workerTable")
+    // displaySelect()
 }
 
 function removePilotRoleResponse() {
-    clearTable("employeeTable")
-    clearTable("pilotTable")
-    clearTable("workerTable")
-    displaySelect()
+    // clearTable("employeeTable")
+    // clearTable("pilotTable")
+    // clearTable("workerTable")
+    // displaySelect()
 }
 
 
@@ -361,7 +364,7 @@ document.getElementById('clearBtn1').onclick = function() {
     clearTable("workerTable")
     clearTable("pilotTable")
     displaySelect()
-    filterTable();
+    // filterTable();
 };
 document.getElementById('clearBtn2').onclick = function() {
     const inputs = document.querySelectorAll('.inp2')
@@ -373,7 +376,7 @@ document.getElementById('clearBtn2').onclick = function() {
     clearTable("workerTable")
     clearTable("pilotTable")
     displaySelect()
-    filterTable();
+    // filterTable();
 };
 document.getElementById('clearBtn3').onclick = function() {
     const inputs = document.querySelectorAll('.inp3')
@@ -385,7 +388,7 @@ document.getElementById('clearBtn3').onclick = function() {
     clearTable("workerTable")
     clearTable("pilotTable")
     displaySelect()
-    filterTable();
+    // filterTable();
 };
 document.getElementById('clearBtn4').onclick = function() {
     const inputs = document.querySelectorAll('.inp4')
@@ -397,7 +400,7 @@ document.getElementById('clearBtn4').onclick = function() {
     clearTable("workerTable")
     clearTable("pilotTable")
     displaySelect()
-    filterTable();
+    // filterTable();
 };
 document.getElementById('clearBtn5').onclick = function() {
     const inputs = document.querySelectorAll('.inp5')
@@ -409,7 +412,7 @@ document.getElementById('clearBtn5').onclick = function() {
     clearTable("workerTable")
     clearTable("pilotTable")
     displaySelect()
-    filterTable();
+    // filterTable();
 };
 document.getElementById('clearBtn6').onclick = function() {
     const inputs = document.querySelectorAll('.inp6')
@@ -421,5 +424,5 @@ document.getElementById('clearBtn6').onclick = function() {
     clearTable("workerTable")
     clearTable("pilotTable")
     displaySelect()
-    filterTable();
+    // filterTable();
 };

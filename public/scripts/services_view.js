@@ -30,38 +30,38 @@ function displaySelectHandler() {
 }
 
 
-function filterTable() {
-    let serviceID = document.getElementById('serviceID').value;
-    let manager = document.getElementById('serviceManager').value;
-    let name = document.getElementById('serviceName').value;
-    if (serviceData != null) {
-        clearTable("serviceTable");
-        for (const service of serviceData) {
-            if (serviceID != "" && manager == "" && name == "") {
-                if (service.id == serviceID) {
-                    populateTable(service, "serviceTable");
-                    continue;
-                }
-            }
-            if (manager != "" && serviceID == "" && name == "") {
-                if (service.manager == manager) {
-                    populateTable(service, "serviceTable");
-                    continue;
-                }
-            }
-            if (name != "" && serviceID == "" && manager == "") {
-                if (service.long_name == name) {
-                    populateTable(service, "serviceTable");
-                    continue;
-                }
-            }
-            if (name == "" && serviceID == "" && manager == "") {
-                populateTable(service, "serviceTable");
-            }
-        }
-    }
+// function filterTable() {
+//     let serviceID = document.getElementById('serviceID').value;
+//     let manager = document.getElementById('serviceManager').value;
+//     let name = document.getElementById('serviceName').value;
+//     if (serviceData != null) {
+//         clearTable("serviceTable");
+//         for (const service of serviceData) {
+//             if (serviceID != "" && manager == "" && name == "") {
+//                 if (service.id == serviceID) {
+//                     populateTable(service, "serviceTable");
+//                     continue;
+//                 }
+//             }
+//             if (manager != "" && serviceID == "" && name == "") {
+//                 if (service.manager == manager) {
+//                     populateTable(service, "serviceTable");
+//                     continue;
+//                 }
+//             }
+//             if (name != "" && serviceID == "" && manager == "") {
+//                 if (service.long_name == name) {
+//                     populateTable(service, "serviceTable");
+//                     continue;
+//                 }
+//             }
+//             if (name == "" && serviceID == "" && manager == "") {
+//                 populateTable(service, "serviceTable");
+//             }
+//         }
+//     }
     
-}
+// }
 
 
 function clearTable(tableName) {
@@ -99,24 +99,26 @@ function populateTable(items, tableName) {
 }
 
 
-document.getElementById('serviceID').onchange = function() {
-    filterTable();
-};
+// document.getElementById('serviceID').onchange = function() {
+//     filterTable();
+// };
 
-document.getElementById('serviceManager').onchange = function() {
-    filterTable();
-};
+// document.getElementById('serviceManager').onchange = function() {
+//     filterTable();
+// };
 
-document.getElementById('serviceName').onchange = function() {
-    filterTable();
-};
+// document.getElementById('serviceName').onchange = function() {
+//     filterTable();
+// };
 
 document.getElementById('clearBtn').onclick = function() {
     document.getElementById('serviceManager').value = "";
     document.getElementById('serviceID').value = "";
     document.getElementById('serviceName').value = "";
     clearTable("serviceTable");
-    filterTable();
+    clearTable("serviceTable2")
+    displaySelect()
+    // filterTable();
 };
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -148,15 +150,14 @@ function addServiceRequest(information) {
     xml.open("POST", url)
     xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
     xml.send(information)
-    clearTable("serviceTable2")
-    displaySelect()
+    
 }
 
 function addServiceResponse() {
-
+    clearTable("serviceTable")
+    clearTable("serviceTable2")
+    displaySelect()
 }
-
-document.addEventListener("DOMContentLoaded", displaySelect);
 
 document.getElementById("manageServiceBtn").onclick = function () {
     let username = document.getElementById("inputUsername")
@@ -181,11 +182,10 @@ function manageServiceRequest(information) {
     xml.open("POST", url)
     xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
     xml.send(information)
-    clearTable("serviceTable")
-    clearTable("serviceTable2")
-    displaySelect()
 }
 
 function manageServiceResponse() {
-
+    clearTable("serviceTable")
+    clearTable("serviceTable2")
+    displaySelect()
 }

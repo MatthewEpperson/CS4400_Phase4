@@ -817,7 +817,7 @@ app.post("/hire-employee", function(req, res) {
                     console.log(err.message)
                     res.json({success: false, message: "error in hiring employee"})
                 } else {
-                    res.json({success: true, message: "successfully firing employee"})
+                    res.json({success: true, message: "successfully hired employee"})
                 }
             })
         }

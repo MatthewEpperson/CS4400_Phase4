@@ -81,6 +81,11 @@ function purchaseIngredient(restaurant) {
     let restaurantName = document.getElementById("inputRestaurant")
     let quantity = document.getElementById("inputQuantity")
 
+    if (quantity.value < 0) {
+        alert("Cannot purchase negative quantity of ingredients!")
+        return
+    }
+
     let validRName = false
     let droneValid = false
     let droneCapacity = false

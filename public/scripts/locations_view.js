@@ -104,9 +104,10 @@ document.getElementById("addLocationBtn").onclick = function() {
     let xCoord = document.getElementById("xCoordInput")
     let yCoord = document.getElementById("yCoordInput")
     let space = document.getElementById("spaceInput")
-
+    // console.log(`${label.value} ${xCoord.value} ${yCoord.value} ${space.value}`)
     addLocation(label.value, xCoord.value, yCoord.value, space.value)
 }
+
 
 
 function addLocation(name, xCoord, yCoord, space) {
@@ -168,11 +169,11 @@ document.getElementById("addRestBtn").onclick = function() {
     let spentIn = document.getElementById("spent")
     let locationIn = document.getElementById("location")
 
-    addLocation(restNameIn.value, ratingIn.value, spentIn.value, locationIn.value)
+    addResturant(restNameIn.value, ratingIn.value, spentIn.value, locationIn.value)
 }
 
 
-function addLocation(restNameIn, ratingIn, spentIn, locationIn) {
+function addResturant(restNameIn, ratingIn, spentIn, locationIn) {
     let information = `rName=${restNameIn}&inRating=${ratingIn}&inSpent=${spentIn}&inLocation=${locationIn}`
     addRestaurantRequest(information)
 }

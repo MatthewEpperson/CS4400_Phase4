@@ -142,6 +142,10 @@ function addIngredientResponse() {
 
 function addIngredient(barcode, name, weight) {
     let information = `barcode=${barcode}&name=${name}&weight=${weight}`
+    if (weight < 0) {
+        alert("You cannot insert a weight that is negative!")
+        return
+    }
     addIngredientRequest(information)
     clearTable("ingredientTable")
     clearTable("ingredientTable2")
